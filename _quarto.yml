@@ -2,10 +2,10 @@ project:
   type: website
 
 website:
-  title: "quarto-blog-luu-michael"
+  title: "Michael Luu, MPH"
   navbar:
     right:
-      - about.qmd
+      - blog.qmd
       - icon: github
         href: https://github.com/
       - icon: twitter
