@@ -34,3 +34,12 @@ knitr::include_url('https://mluu921.github.io/cshs-bms510-data-manipulation-slid
 ```{r}
 knitr::include_url('https://mluu921.github.io/cshs-bms510-ggplot2-slides/#/descriptive-statistics-in-r')
 ```
+
+# Descriptive Statistics
+
+* Talk presented for the MRM615 course
+
+```{r}
+knitr::include_url('https://mluu921.github.io/biostats_mrm615_descriptive/')
+```
+
