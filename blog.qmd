@@ -8,11 +8,7 @@ listing:
   sort-ui: false
   filter-ui: false
 page-layout: article
-<<<<<<< HEAD
 title-block-banner: false
-=======
-title-block-banner: true
->>>>>>> 630c654bfaa7cf31c8ff2f60bfc0040eb44f067b
 ---
 
 
