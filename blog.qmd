@@ -8,8 +8,7 @@ listing:
   sort-ui: false
   filter-ui: false
 page-layout: article
-date-modified: today
-title-block-banner: true
+title-block-banner: false
 ---
 
 

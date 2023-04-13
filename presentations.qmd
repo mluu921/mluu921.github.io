@@ -1,0 +1,20 @@
+---
+title: "Presentations"
+date-modified: today
+echo: false
+warning: false
+message: false
+title-block-banner: false
+page-layout: article
+toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+# Descriptive Statistics
+
+* Talk presented at the annual CSHS Biostatistics Fall Lecture
+
+```{r}
+knitr::include_url('https://mluu921.github.io/cshs-fall-lecture-descriptive-statistics/#/descriptive-statistics')
+```
