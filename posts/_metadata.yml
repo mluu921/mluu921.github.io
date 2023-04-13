@@ -7,6 +7,5 @@ freeze: auto
 # Enable banner style title blocks
 title-block-banner: true
 
+# Make all post with my name on it 
 author: 'Michael Luu'
-
-reading-time: true
