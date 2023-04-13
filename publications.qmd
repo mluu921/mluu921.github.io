@@ -33,6 +33,12 @@ pm <- local({
   arrange(desc(date)) |> 
   mutate(date = format(date, '%B-%Y'))
 
+pm <- pm |> 
+  mutate(
+    doi = glue::glue('<a href=https://doi.org/{doi}>{doi}</a>'),
+    doi = map(doi, \(x) htmltools::HTML(x))
+  )
+
 pm |>
   DT::datatable(
     style = 'bootstrap4',
