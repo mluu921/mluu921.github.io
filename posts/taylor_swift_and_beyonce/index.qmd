@@ -3,13 +3,12 @@ title: "Natural Language Processing (NLP) and developing a machine learning clas
 description: 'NLP and building a machine learning clasifier on Beyonce and Taylor Swift Lyrics #TidyTuesday'
 date: '2020-10-02'
 date-modified: today
+toc: true
 ---
 
-Let's start off by loading the data from the tidytuesday github repository.
-
-# Reading in data
 
 ```{r}
+#| include: false
 library(tidytuesdayR)
 library(tidymodels)
 library(tidyverse)
@@ -18,7 +17,13 @@ library(future)
 library(gt)
 
 plan(multisession)
+```
 
+Let's start off by loading the data from the tidytuesday github repository.
+
+# Reading in data
+
+```{r}
 theme_set(
   theme_light() + 
     theme(panel.grid.minor = element_blank())
@@ -243,7 +248,10 @@ test %>%
 
 ```
 
-
+# Session info
+```{r}
+sessionInfo()
+```
 
 
 
