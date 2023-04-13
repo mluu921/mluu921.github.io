@@ -8,9 +8,8 @@
 
 <meta name="author" content="Michael Luu">
 <meta name="dcterms.date" content="2023-04-13">
-<meta name="description" content="Utilizing purrr to programatically generate tabs to organize and present a large list of outputs">
 
-<title>Michael Luu, MPH - Programatically generate Quarto tabs</title>
+<title>Michael Luu, MPH - Retrieve Pubmed publications using the RefManageR package</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -150,13 +149,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Programatically generate Quarto tabs</h1>
-                  <div>
-        <div class="description">
-          Utilizing purrr to programatically generate tabs to organize and present a large list of outputs
-        </div>
-      </div>
-                </div>
+      <h1 class="title">Retrieve Pubmed publications using the RefManageR package</h1>
+                      </div>
   </div>
     
   
@@ -196,100 +190,84 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>When working with a list of objects, it may be useful to organize the objects into tabs instead of a huge list of individual objects</p>
-<p>Using the <code>iris</code> dataset as a working example, I generate a list of ggplot objects.</p>
+<p>For anyone that’s working in academia, it may be useful to keep a tabulation of all of the publications that you are a co-author of. We can use the <code>RefManageR</code> package, which includes a function (<code>ReadPubMed()</code>) that allows us to query the PubMed API for publications based on a PubMed query.</p>
+<p>Below I generate a PubMed query <code>q</code> that would query PubMed for publications that involves <code>Luu, Michael</code> as an author with a <code>Cedars-Sinai</code> affiliation. I then pass this query into the <code>ReadPubMed()</code> function and save the results as <code>pm</code>. The output is a <code>BibEntry</code> object that can be further coerced into a tibble.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> iris <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="st">'(Luu, Michael[Author]) AND (Cedars-Sinai[Affiliation])'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_nest</span>(species) <span class="sc">|&gt;</span> </span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">deframe</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pm <span class="ot">&lt;-</span> RefManageR<span class="sc">::</span><span class="fu">ReadPubMed</span>(q, <span class="at">retmax =</span> <span class="dv">999</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> pm <span class="sc">|&gt;</span> <span class="fu">as_tibble</span>()</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> out <span class="sc">|&gt;</span> </span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">map</span>(\(data) {</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ggplot</span>(data, <span class="fu">aes</span>(<span class="at">x =</span> sepal_length, <span class="at">y =</span> sepal_width)) <span class="sc">+</span> </span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_point</span>()</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The list of ggplot2 objects can be called and presented as below</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>$setosa</code></pre>
+<pre><code>Rows: 68
+Columns: 15
+$ bibtype    &lt;chr&gt; "Article", "Article", "Article", "Article", "Article", "Art…
+$ title      &lt;chr&gt; "Concurrent prognostic utility of lymph node count and lymp…
+$ author     &lt;chr&gt; "John M Masterson and Michael Luu and Aurash Naser-Tavakoli…
+$ year       &lt;chr&gt; "2023", "2022", "2023", "2022", "2022", "2022", "2022", "20…
+$ month      &lt;chr&gt; "Jan", "Nov", "Apr", "Aug", "Oct", "Jul", "Aug", "Jul", "Ma…
+$ journal    &lt;chr&gt; "Prostate cancer and prostatic diseases", "NPJ breast cance…
+$ eprint     &lt;chr&gt; "36600045", "36402796", "36385470", "36054029", "35997126",…
+$ doi        &lt;chr&gt; "10.1038/s41391-022-00635-1", "10.1038/s41523-022-00489-9",…
+$ language   &lt;chr&gt; "eng", "eng", "eng", "eng", "eng", "eng", "eng", "eng", "en…
+$ issn       &lt;chr&gt; "1476-5608", "2374-4677", "1531-4995", "1531-4995", "1097-0…
+$ abstract   &lt;chr&gt; "BACKGROUND: While both the number (+LN) and density (LND) …
+$ eprinttype &lt;chr&gt; "pubmed", "pubmed", "pubmed", "pubmed", "pubmed", "pubmed",…
+$ volume     &lt;chr&gt; NA, "8", "133", NA, "128", "113", "208", "114", "165", "40"…
+$ number     &lt;chr&gt; NA, "1", "4", NA, "20", "4", "2", "7", "2", "4", "1", "1", …
+$ pages      &lt;chr&gt; NA, "123", "E25", NA, "3610-3619", "787-795", "301-308", "1…</code></pre>
 </div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="quarto-discovered-preview-image img-fluid" width="672"></p>
-</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>
-$versicolor</code></pre>
+<pre><code># A tibble: 68 × 15
+   bibtype title author year  month journal eprint doi   language issn  abstract
+   &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;   
+ 1 Article Conc… John … 2023  Jan   Prosta… 36600… 10.1… eng      1476… "BACKGR…
+ 2 Article Toxi… N Lyn… 2022  Nov   NPJ br… 36402… 10.1… eng      2374… "Adjuva…
+ 3 Article In R… Eric … 2023  Apr   The La… 36385… 10.1… eng      1531…  &lt;NA&gt;   
+ 4 Article Pred… Eric … 2022  Aug   The La… 36054… 10.1… eng      1531… "BACKGR…
+ 5 Article Disp… Yi-Te… 2022  Oct   Cancer  35997… 10.1… eng      1097… "BACKGR…
+ 6 Article Noda… Diana… 2022  Jul   Intern… 35395… 10.1… eng      1879… "PURPOS…
+ 7 Article Vari… Timot… 2022  Aug   The Jo… 35377… 10.1… eng      1527… "PURPOS…
+ 8 Article Quan… Antho… 2022  Jul   Journa… 35311… 10.1… eng      1460… "BACKGR…
+ 9 Article Path… Eric … 2022  May   Gyneco… 35216… 10.1… eng      1095… "PURPOS…
+10 Article Pred… Paige… 2022  Apr   Urolog… 35067… 10.1… eng      1873… "BACKGR…
+# ℹ 58 more rows
+# ℹ 4 more variables: eprinttype &lt;chr&gt;, volume &lt;chr&gt;, number &lt;chr&gt;, pages &lt;chr&gt;</code></pre>
 </div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid" width="672"></p>
 </div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-$virginica</code></pre>
-</div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-<p>Instead of presenting a long list of plots, we can organize the plots into individual tabs. In order to do this, we utilize a combination of <code>imap_chr()</code> and <code>knit_child()</code>. We use <code>imap_chr()</code> to pass on individual plots into <code>knit_child()</code>. We wrap this chunk within a fenced div <code>panel-tabset</code>, and utilize <code>results: asis</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode default code-with-copy"><code class="sourceCode default"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>::: panel-tabset</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>```{r}</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>#| results: asis</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>out &lt;- imap_chr(out, \(out, title) {</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  text &lt;- glue::glue("## `r title`</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                      ```{r}</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>                      out</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                      ```")</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  knitr::knit_child(text = text, envir = environment(),</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>                    quiet = T)</span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>})</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>cat(out, sep = ' ')</span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>```</span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>:::</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">setosa</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">versicolor</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-3" role="tab" aria-controls="tabset-1-3" aria-selected="false">virginica</a></li></ul>
-<div class="tab-content">
-<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<p>Now that we have this information into a tibble, we can further visualize the frequency of occurrences among the list of co-authors using a word cloud</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>plot_data <span class="ot">&lt;-</span> out <span class="sc">|&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(author) <span class="sc">|&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">separate_wider_delim</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    author,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">names =</span> <span class="fu">paste0</span>(<span class="st">'author'</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">delim =</span> <span class="st">' and '</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">too_few =</span> <span class="st">'align_start'</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">i =</span> <span class="fu">row_number</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">'author'</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(value)) <span class="sc">|&gt;</span> </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(value) <span class="sc">|&gt;</span> </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n)) <span class="sc">|&gt;</span> </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(value <span class="sc">!=</span> <span class="st">'Michael Luu'</span>)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(plot_data, <span class="fu">aes</span>(<span class="at">label =</span> value, <span class="at">size =</span> n)) <span class="sc">+</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text_wordcloud_area</span>() <span class="sc">+</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_area</span>(<span class="at">max_size =</span> <span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</div>
-<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</div>
-<div id="tabset-1-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-3-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>out</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
-</div>
-</div>
-</div>
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="quarto-discovered-preview-image img-fluid" style="width:100.0%"></p>
 </div>
 </div>
 <section id="session-info" class="level1">
 <h1>Session info</h1>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>R version 4.2.2 (2022-10-31 ucrt)
 Platform: x86_64-w64-mingw32/x64 (64-bit)
@@ -308,22 +286,23 @@ attached base packages:
 [1] stats     graphics  grDevices datasets  utils     methods   base     
 
 other attached packages:
- [1] lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0   dplyr_1.1.1    
- [5] purrr_1.0.1     readr_2.1.4     tidyr_1.3.0     tibble_3.2.1   
- [9] ggplot2_3.4.2   tidyverse_2.0.0
+ [1] ggwordcloud_0.5.0 RefManageR_1.4.0  lubridate_1.9.2   forcats_1.0.0    
+ [5] stringr_1.5.0     dplyr_1.1.1       purrr_1.0.1       readr_2.1.4      
+ [9] tidyr_1.3.0       tibble_3.2.1      ggplot2_3.4.2     tidyverse_2.0.0  
 
 loaded via a namespace (and not attached):
- [1] compiler_4.2.2    pillar_1.9.0      tools_4.2.2       digest_0.6.31    
- [5] timechange_0.2.0  jsonlite_1.8.4    evaluate_0.19     lifecycle_1.0.3  
- [9] gtable_0.3.3      pkgconfig_2.0.3   rlang_1.1.0       cli_3.6.1        
-[13] rstudioapi_0.14   yaml_2.3.6        xfun_0.38         fastmap_1.1.0    
-[17] janitor_2.2.0     withr_2.5.0       knitr_1.41        hms_1.1.3        
-[21] generics_0.1.3    vctrs_0.6.1       htmlwidgets_1.6.2 grid_4.2.2       
-[25] tidyselect_1.2.0  snakecase_0.11.0  glue_1.6.2        R6_2.5.1         
-[29] fansi_1.0.4       rmarkdown_2.19    farver_2.1.1      tzdb_0.3.0       
-[33] magrittr_2.0.3    scales_1.2.1      htmltools_0.5.4   colorspace_2.1-0 
-[37] renv_0.16.0       labeling_0.4.2    utf8_1.2.3        stringi_1.7.8    
-[41] munsell_0.5.0    </code></pre>
+ [1] tidyselect_1.2.0  xfun_0.38         colorspace_2.1-0  vctrs_0.6.1      
+ [5] generics_0.1.3    htmltools_0.5.4   yaml_2.3.6        utf8_1.2.3       
+ [9] rlang_1.1.0       pillar_1.9.0      glue_1.6.2        withr_2.5.0      
+[13] lifecycle_1.0.3   plyr_1.8.8        munsell_0.5.0     gtable_0.3.3     
+[17] htmlwidgets_1.6.2 evaluate_0.19     labeling_0.4.2    knitr_1.41       
+[21] tzdb_0.3.0        fastmap_1.1.0     curl_5.0.0        fansi_1.0.4      
+[25] Rcpp_1.0.10       renv_0.16.0       scales_1.2.1      backports_1.4.1  
+[29] jsonlite_1.8.4    farver_2.1.1      hms_1.1.3         png_0.1-8        
+[33] digest_0.6.31     stringi_1.7.8     grid_4.2.2        bibtex_0.5.1     
+[37] cli_3.6.1         tools_4.2.2       magrittr_2.0.3    pkgconfig_2.0.3  
+[41] xml2_1.3.3        timechange_0.2.0  rmarkdown_2.19    httr_1.4.5       
+[45] rstudioapi_0.14   R6_2.5.1          compiler_4.2.2   </code></pre>
 </div>
 </div>
 

@@ -1,0 +1,66 @@
+---
+title: "Retrieve Pubmed publications using the RefManageR package"
+date: "4/13/2023"
+date-modified: today
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false
+library(tidyverse)
+library(RefManageR)
+library(ggwordcloud)
+
+```
+
+For anyone that's working in academia, it may be useful to keep a tabulation of all of the publications that you are a co-author of. We can use the `RefManageR` package, which includes a function (`ReadPubMed()`) that allows us to query the PubMed API for publications based on a PubMed query.
+
+Below I generate a PubMed query `q` that would query PubMed for publications that involves `Luu, Michael` as an author with a `Cedars-Sinai` affiliation. I then pass this query into the `ReadPubMed()` function and save the results as `pm`. The output is a `BibEntry` object that can be further coerced into a tibble.
+
+```{r}
+
+q <- '(Luu, Michael[Author]) AND (Cedars-Sinai[Affiliation])'
+
+pm <- RefManageR::ReadPubMed(q, retmax = 999)
+  
+out <- pm |> as_tibble()
+
+glimpse(out)
+
+out
+```
+
+Now that we have this information into a tibble, we can further visualize the frequency of occurrences among the list of co-authors using a word cloud
+
+```{r}
+#| out-width: 100%
+
+plot_data <- out |>
+  select(author) |>
+  separate_wider_delim(
+    author,
+    names = paste0('author', 1:20),
+    delim = ' and ',
+    too_few = 'align_start'
+  ) |>
+  mutate(i = row_number()) |>
+  pivot_longer(contains('author')) |>
+  filter(!is.na(value)) |> 
+  count(value) |> 
+  arrange(desc(n)) |> 
+  filter(value != 'Michael Luu')
+
+set.seed(1)
+ggplot(plot_data, aes(label = value, size = n)) +
+  geom_text_wordcloud_area() +
+  scale_size_area(max_size = 16) +
+  theme_minimal()
+
+```
+
+# Session info
+
+```{r}
+sessionInfo()
+```
