@@ -11,10 +11,26 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Descriptive Statistics
+# Descriptive Statistics: The Importance of Visualization
 
 * Talk presented at the annual CSHS Biostatistics Fall Lecture
 
 ```{r}
 knitr::include_url('https://mluu921.github.io/cshs-fall-lecture-descriptive-statistics/#/descriptive-statistics')
+```
+
+# Data Manipulation: Introduction to the tidyverse: dplyr & tidyr
+
+* Talk presented for the BMS510 course
+
+```{r}
+knitr::include_url('https://mluu921.github.io/cshs-bms510-data-manipulation-slides/#/data-manipulation-in-r')
+```
+
+# Descriptive Statistics in R: Introduction to plotting in the tidyverse: ggplot2
+
+* Talk presented for the BMS510 course
+
+```{r}
+knitr::include_url('https://mluu921.github.io/cshs-bms510-ggplot2-slides/#/descriptive-statistics-in-r')
 ```
