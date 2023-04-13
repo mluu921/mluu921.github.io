@@ -8,6 +8,7 @@ website:
     right:
       - blog.qmd
       - publications.qmd
+      - presentations.qmd
       - icon: github
         href: https://github.com/mluu921
       - icon: linkedin

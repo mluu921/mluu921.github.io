@@ -28,23 +28,46 @@ pm <- local({
   RefManageR::ReadPubMed(q, retmax = 999)
   
 }) |> 
-  as_tibble() |>
-  mutate(date = my(paste0(month,'-', year))) |> 
-  select(date, journal, title, doi) |>
-  arrange(desc(date)) |> 
-  mutate(date = format(date, '%B-%Y'))
+  as_tibble()
 
-pm <- pm |> 
+tbl <- pm %>%
+  select(journal,
+         title,
+         author,
+         year,
+         month,
+         doi) %>%
+  mutate(author = str_split(author, ' and ')) %>%
   mutate(
-    doi = glue::glue('<a href=https://doi.org/{doi}>{doi}</a>'),
-    doi = map(doi, \(x) htmltools::HTML(x))
-  )
+    first_author = map_chr(author, ~ .x[[1]]),
+    total_authors = map_int(author, ~ length(.x)),
+    corresponding_author = map2_chr(author, total_authors, ~ .x[[.y]]),
+    authorship_position = map_int(author, ~ str_which(.x, 'Michael Luu')),
+    authorship_position = glue::glue('{authorship_position}/{total_authors}'),
+    date = my(glue::glue('{month}-{year}'))
+  ) %>%
+  select(date,
+         journal,
+         title,
+         first_author,
+         corresponding_author,
+         authorship_position,
+         doi) %>%
+  arrange(desc(date)) |>
+  mutate(date = format(date, '%B-%Y')) |> 
+  mutate(
+    title = glue::glue('<a href=https://doi.org/{doi}>{title}</a>'),
+    title = map(title, \(x) htmltools::HTML(x))
+  ) |> 
+  select(-doi)
 
-pm |>
+tbl |>
   DT::datatable(
     style = 'bootstrap4',
     class = 'compact',
-    colnames = c('Month-Year', 'Journal', 'Title', 'DOI'),
+    colnames = c('Date', 'Journal', 'Title', 'First Author',
+                 'Corresponding Author',
+                 'Authorship Position'),
     filter = 'top'
   )
 ```
