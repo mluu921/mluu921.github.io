@@ -8,3 +8,5 @@ freeze: auto
 title-block-banner: true
 
 author: 'Michael Luu'
+
+reading-time: true

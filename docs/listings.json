@@ -2,7 +2,9 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/ggplot2km/index.html",
       "/posts/mylifeinmonths/index.html",
+      "/posts/covid19_mask_usage/index.html",
       "/posts/taylor_swift_and_beyonce/index.html"
     ]
   }

@@ -4,7 +4,8 @@ description: "This blog post is inspired by [Sharla Gefland](https://twitter.com
 date: '2020-10-07'
 date-modified: today
 freeze: auto
-toc: true
+toc: false
+image: featured.jpg
 ---
 
 ```{r}
