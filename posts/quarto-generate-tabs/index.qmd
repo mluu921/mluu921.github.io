@@ -1,5 +1,107 @@
 ---
-title: "Untitled"
-draft: true
+title: "Programatically generate Quarto tabs"
+description: "Utilizing purrr to programatically generate tabs to organize and present a large list of outputs"
+date: '4-13-2023'
+date-modified: today
+image: featured.jpg
+draft: false
+editor_options: 
+  chunk_output_type: console
 ---
+
+```{r}
+#| include: false
+library(tidyverse)
+
+```
+
+When working with a list of outputs, it may be useful to organize the outputs into tabs instead of a huge list of individual outputs.
+
+Using the `iris` dataset as a working example, I generate a list of ggplot objects.
+
+```{r}
+
+data <- iris |> as_tibble() |> janitor::clean_names()
+
+out <- data |> 
+  group_nest(species) |> 
+  deframe()
+
+out <- out |> 
+  map(\(data) {
+    
+    ggplot(data, aes(x = sepal_length, y = sepal_width)) + 
+      geom_point()
+    
+  })
+
+```
+
+The list of outputs can be called and presented as below
+
+```{r}
+out
+```
+
+Instead of presenting a long list of plots, we can organize the plots into individual tabs. In order to do this, we utilize a combination of `imap_chr()` and `knit_child()`. We use `imap_chr()` to pass on individual plots into `knit_child()`. We wrap this chunk within a fenced div `panel-tabset`, and utilize `results: asis`.
+
+````{verbatim}
+::: panel-tabset
+```{r}
+#| results: asis
+out <- imap_chr(out, \(out, title) {
+  
+  text <- glue::glue("## `r title`
+                      ```{{r}}
+                      out
+                      ```")
+  
+  knitr::knit_child(text = text, envir = environment(),
+                    quiet = T)
+  
+})
+
+cat(out, sep = ' ')
+```
+:::
+````
+
+::: panel-tabset
+```{r}
+#| results: asis
+out <- imap_chr(out, \(out, title) {
+  
+  text <- glue::glue("## `r title`
+```{{r}}
+out
+```")
+  
+  knitr::knit_child(text = text, envir = environment(),
+                    quiet = T)
+  
+})
+
+cat(out, sep = ' ')
+```
+:::
+
+# Session info
+```{r}
+sessionInfo()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
