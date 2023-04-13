@@ -5,7 +5,7 @@ echo: false
 warning: false
 message: false
 title-block-banner: false
-page-layout: full
+page-layout: article
 editor_options: 
   chunk_output_type: console
 ---
