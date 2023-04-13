@@ -1,0 +1,44 @@
+---
+title: "Publications"
+date-modified: today
+echo: false
+warning: false
+message: false
+title-block-banner: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+library(RefManageR)
+library(lubridate)
+library(gt)
+library(gtExtras)
+
+```
+
+```{r}
+#| column: screen-inset
+
+pm <- local({
+  q <- '(Luu, Michael[Author]) AND (Cedars-Sinai[Affiliation])'
+  
+  RefManageR::ReadPubMed(q, retmax = 999)
+  
+}) |> 
+  as_tibble() |>
+  mutate(date = my(paste0(month,'-', year))) |> 
+  select(date, journal, title, doi) |>
+  arrange(desc(date)) |> 
+  mutate(date = format(date, '%B-%Y'))
+
+pm |>
+  DT::datatable(
+    style = 'bootstrap4',
+    class = 'compact',
+    colnames = c('Month-Year', 'Journal', 'Title', 'DOI'),
+    filter = 'top'
+  )
+```
+
