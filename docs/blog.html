@@ -70,9 +70,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-categories"],
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -148,7 +148,7 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(0)</span></div></div></div>
+    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(2)</span></div></div></div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -175,7 +175,62 @@ ul.task-list li input[type="checkbox"] {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1602054000000" data-listing-file-modified-sort="1681406771460" data-listing-date-modified-sort="1681369200000" data-listing-reading-time-sort="11">
+<div class="thumbnail">
+<p><a href="./posts/mylifeinmonths/index.html"> <img src="posts\mylifeinmonths\index_files\figure-html\unnamed-chunk-3-1.png" /> </a></p>
+</div>
+<div class="body">
+<a href="./posts/mylifeinmonths/index.html">
+<h3 class="no-anchor listing-title">
+My life in Months - Making a ‘life plot’ in R using ggplot2
+</h3>
+<div class="listing-subtitle">
 
+</div>
+<div class="listing-description">
+<p>This blog post is inspired by <span>Sharla Gefland</span> twitter post found <span>here</span>, where she made a ‘My Life in Months’ plot.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/mylifeinmonths/index.html">
+<div class="listing-date">
+Oct 7, 2020
+</div>
+<div class="listing-author">
+Michael Luu
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1601622000000" data-listing-file-modified-sort="1681406774504" data-listing-date-modified-sort="1681369200000" data-listing-reading-time-sort="5">
+<div class="thumbnail">
+<p><a href="./posts/taylor_swift_and_beyonce/index.html"> <img src="posts\taylor_swift_and_beyonce\index_files\figure-html\unnamed-chunk-8-1.png" /> </a></p>
+</div>
+<div class="body">
+<a href="./posts/taylor_swift_and_beyonce/index.html">
+<h3 class="no-anchor listing-title">
+Natural Language Processing (NLP) and developing a machine learning classifier on Beyonce and Taylor Swift lyrics #TidyTuesday
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+<p>NLP and building a machine learning clasifier on Beyonce and Taylor Swift Lyrics #TidyTuesday</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/taylor_swift_and_beyonce/index.html">
+<div class="listing-date">
+Oct 2, 2020
+</div>
+<div class="listing-author">
+Michael Luu
+</div>
+</a>
+</div>
+</div>
 </div>
 <div class="listing-no-matching d-none">
 No matching items

@@ -1,6 +1,9 @@
 [
   {
     "listing": "/blog.html",
-    "items": []
+    "items": [
+      "/posts/mylifeinmonths/index.html",
+      "/posts/taylor_swift_and_beyonce/index.html"
+    ]
   }
 ]
