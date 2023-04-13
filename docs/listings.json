@@ -2,10 +2,10 @@
   {
     "listing": "/blog.html",
     "items": [
-      "/posts/ggplot2km/index.html",
-      "/posts/mylifeinmonths/index.html",
-      "/posts/covid19_mask_usage/index.html",
-      "/posts/taylor_swift_and_beyonce/index.html"
+      "/posts/ggplot2-km/index.html",
+      "/posts/my-life-in-months/index.html",
+      "/posts/leaflet-covid19-mask-usage/index.html",
+      "/posts/nlp-taylor-swift-beyonce/index.html"
     ]
   }
 ]
