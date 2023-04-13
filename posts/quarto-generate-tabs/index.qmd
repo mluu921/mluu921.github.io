@@ -15,7 +15,7 @@ library(tidyverse)
 
 ```
 
-When working with a list of outputs, it may be useful to organize the outputs into tabs instead of a huge list of individual outputs.
+When working with a list of objects, it may be useful to organize the objects into tabs instead of a huge list of individual objects
 
 Using the `iris` dataset as a working example, I generate a list of ggplot objects.
 
@@ -37,7 +37,7 @@ out <- out |>
 
 ```
 
-The list of outputs can be called and presented as below
+The list of ggplot2 objects can be called and presented as below
 
 ```{r}
 out
