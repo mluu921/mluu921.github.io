@@ -2,7 +2,6 @@
 title: "Programatically generate Quarto tabs"
 description: "Utilizing purrr to programatically generate tabs to organize and present a large list of outputs"
 date: '4-13-2023'
-date-modified: today
 image: featured.jpg
 draft: false
 editor_options: 

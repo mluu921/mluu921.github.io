@@ -2,7 +2,6 @@
 title: "Natural Language Processing (NLP) and developing a machine learning classifier on Beyonce and Taylor Swift lyrics #TidyTuesday"
 description: 'NLP and building a machine learning clasifier on Beyonce and Taylor Swift Lyrics #TidyTuesday'
 date: '2020-10-02'
-date-modified: today
 toc: true
 ---
 

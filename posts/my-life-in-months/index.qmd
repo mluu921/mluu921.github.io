@@ -2,7 +2,6 @@
 title: "My life in Months - Making a 'life plot' in R using ggplot2 "
 description: "This blog post is inspired by [Sharla Gefland](https://twitter.com/sharlagelfand) twitter post found [here](https://twitter.com/sharlagelfand/status/1282783913002373121?s=20), where she made a 'My Life in Months' plot. "
 date: '2020-10-07'
-date-modified: today
 freeze: auto
 toc: false
 image: featured.jpg

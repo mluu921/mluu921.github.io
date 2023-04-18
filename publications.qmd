@@ -11,26 +11,36 @@ editor_options:
 ---
 
 ```{r}
+#| include: false
 library(tidyverse)
 library(RefManageR)
 library(lubridate)
 library(gt)
 library(gtExtras)
+library(rbibutils)
 
-```
-
-```{r}
-#| column: screen-inset
-
-pm <- local({
+pmobj <- local({
   q <- '(Luu, Michael[Author]) AND (Cedars-Sinai[Affiliation])'
   
   RefManageR::ReadPubMed(q, retmax = 999)
   
-}) |> 
-  as_tibble()
+})
 
-tbl <- pm %>%
+pmobj |> RefManageR::WriteBib(file = 'luu-publications-bib.bib')
+
+rbibutils::bibConvert(infile = 'luu-publications-bib.bib', 
+                      outfile = 'luu-publications-ris.ris')
+  
+pmtbl <- pmobj |> as_tibble()
+
+```
+
+Citations available to download as .bib and .ris
+
+```{r}
+#| column: screen-inset
+
+tbl <- pmtbl %>%
   select(journal,
          title,
          author,
@@ -71,4 +81,3 @@ tbl |>
     filter = 'top'
   )
 ```
-
