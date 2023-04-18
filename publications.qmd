@@ -35,7 +35,7 @@ pmtbl <- pmobj |> as_tibble()
 
 ```
 
-Citations available to download as .bib and .ris
+Citations available to download as [.bib](https://raw.githubusercontent.com/mluu921/mluu921.github.io/master/luu-publications-bib.bib) and [.ris](https://raw.githubusercontent.com/mluu921/mluu921.github.io/master/luu-publications-ris.ris)
 
 ```{r}
 #| column: screen-inset
