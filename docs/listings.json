@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/meta-programming/index.html",
       "/posts/quarto-generate-tabs/index.html",
       "/posts/retrieve-pubmed-publications/index.html",
       "/posts/ggplot2-km/index.html",

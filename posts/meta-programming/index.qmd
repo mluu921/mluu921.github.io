@@ -1,0 +1,73 @@
+---
+title: "Meta-programming with R and rlang"
+date: "5/10/2023"
+draft: false
+warning: false
+message: false
+editor_options: 
+  chunk_output_type: console
+---
+
+`rlang` is a powerful R package that allows the coder the ability to write code with code. The amazing book [Advanced R](https://adv-r.hadley.nz/index.html) by Hadley Wickham goes into this idea in much greater detail, but I wanted to present a small example of my favorite function `parse_expr()` from the `rlang` package in this post.
+
+In short, `rlang` provides functions that facilitates the coder the ability to delay evaluation of expressions. Furthermore, we can manipulate the the expressions with various tools within `rlang`, by piecing together various expressions.
+
+I will be using the data from the `palmerpenguins` package
+
+```{r}
+library(palmerpenguins)
+library(rlang)
+
+data <- palmerpenguins::penguins
+
+data
+```
+
+As a simple example, let's say we would like to build a linear regression model for bill_length_mm, using all other variables as covariates.
+
+```{r}
+
+fit <-
+  lm(
+    bill_length_mm ~ species + island + bill_depth_mm + flipper_length_mm +
+      body_mass_g + sex + year,
+    data = data
+  )
+
+fit
+```
+
+This is a simple example, but what would happen if there are many many covariates we would like to include in the model. We can construct the formula as a string and then use `parse_expr()` to parse the string into an expression.
+
+```{r}
+
+f <- paste0('bill_length_mm ~ ', paste0(names(data)[names(data) != 'bill_length_mm'], collapse = ' + '))
+
+f <- parse_expr(f)
+
+f
+```
+
+As an example, we can construct an expression like so, and delay the evaluation for later time.
+
+```{r}
+expr(lm("this is where the formula should be inserted", data = data))
+```
+
+Using the example from above, we can construct a new expression, and inject the previous expression into it using the `!!` (bang bang) operator.
+
+```{r}
+lm_model <- expr(lm(!!f, data = data))
+
+lm_model
+```
+
+As we can see, using the `!!` operator allows us to piece together various expressions. However, do note that the expression is still not evaluated. If we would like to evaluate the expression, we can pass the object `lm_model` into `eval()`
+
+```{r}
+lm_model |> eval()
+```
+
+Although this is a fun toy example, the ability to piece together various pieces of expression and delay evaluation is a very power functional programming tool in R.
+
+
