@@ -1,6 +1,5 @@
 ---
 title: "Publications"
-date-modified: today
 echo: false
 warning: false
 message: false
@@ -10,7 +9,7 @@ editor_options:
   chunk_output_type: console
 ---
 
-::: {.column-screen-inset}
+::: {.column-page}
 
 <iframe src="https://mluu921.shinyapps.io/shiny-publications-dashboard/" height=1000px width=100% />
 
