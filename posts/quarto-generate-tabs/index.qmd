@@ -51,7 +51,7 @@ Instead of presenting a long list of plots, we can organize the plots into indiv
 out <- imap_chr(out, \(out, title) {
   
   text <- glue::glue("## `r title`
-                      ```{{r}}
+                      ```{{{r}}}
                       out
                       ```")
   
