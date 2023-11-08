@@ -9,8 +9,64 @@ editor_options:
   chunk_output_type: console
 ---
 
-::: {.column-page}
+```{r}
+library(tidyverse)
+library(RefManageR)
+library(gt)
 
-<iframe src="https://mluu921.shinyapps.io/shiny-publications-dashboard/" height=1000px width=100% />
+q <- '(Michael Luu) AND (Cedars-Sinai[Affiliation])'
 
-:::
+data <- RefManageR::ReadPubMed(q, retmax = 999)
+
+data <- data |> as_tibble()
+
+```
+
+```{r}
+#| column: page
+
+tbl <- data |>
+  select(title, author, year, month, journal, doi) |>
+  transmute(date = mdy(paste0(month, '-', year)),
+            title, author, journal, doi) |> 
+  arrange(desc(date))
+
+tbl <- tbl |> 
+  mutate(
+    author = str_replace_all(author, ' and ', ', '),
+    author = str_replace_all(author, 'Michael Luu', '**Michael Luu**'),
+    doi = glue::glue('https://doi.org/{doi}')
+  )
+
+tbl |> 
+  gt() |> 
+  cols_label(
+    date = 'Date',
+    title = 'Title',
+    author = 'Authors',
+    journal = 'Journal',
+    doi = 'DOI'
+  ) |> 
+  opt_interactive(
+    use_search = TRUE,
+    use_filters = TRUE,
+    use_resizers = TRUE,
+    use_highlight = TRUE,
+    use_compact_mode = TRUE,
+    use_text_wrapping = TRUE,
+    use_page_size_select = TRUE
+  ) |> 
+  fmt_markdown(columns = author) |> 
+  fmt_date(columns = date,
+           date_style = 'yMMM') |> 
+  fmt_url(columns = doi) |> 
+  cols_align(columns = doi, align = 'left') |> 
+  tab_header(
+    title = glue::glue('Last Updated: {Sys.Date()}')
+  ) |> 
+  tab_options(
+    heading.title.font.size = 30,
+    heading.title.font.weight = 'bold'
+  )
+```
+
