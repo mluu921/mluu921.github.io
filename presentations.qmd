@@ -42,7 +42,7 @@ data <- tibble(
 )
 
 data <- data |>
-  mutate(title = glue::glue('<a href="{link}" target="_blank">{title}</a>')) |>
+  mutate(title = glue::glue('<a href={link}>{title}</a>')) |>
   select(-link)
 
 data |>
