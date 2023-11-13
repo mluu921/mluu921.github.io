@@ -1,12 +1,5 @@
 [
   {
-    "objectID": "publications.html",
-    "href": "publications.html",
-    "title": "Publications",
-    "section": "",
-    "text": "Last Updated: 2023-11-12"
-  },
-  {
     "objectID": "posts/retrieve-pubmed-publications/index.html",
     "href": "posts/retrieve-pubmed-publications/index.html",
     "title": "Retrieve Pubmed publications using the RefManageR package",
