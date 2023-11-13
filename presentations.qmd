@@ -11,35 +11,49 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Descriptive Statistics: The Importance of Visualization
-
-* Talk presented at the annual CSHS Biostatistics Fall Lecture
 
 ```{r}
-knitr::include_url('https://mluu921.github.io/cshs-fall-lecture-descriptive-statistics/#/descriptive-statistics')
+library(tidyverse)
+library(gt)
 ```
 
-# Data Manipulation: Introduction to the tidyverse: dplyr & tidyr
-
-* Talk presented for the BMS510 course
-
 ```{r}
-knitr::include_url('https://mluu921.github.io/cshs-bms510-data-manipulation-slides/#/data-manipulation-in-r')
-```
+#| column: page
 
-# Descriptive Statistics in R: Introduction to plotting in the tidyverse: ggplot2
+data <- tibble(
+  title = c(
+    'Descriptive Statistics: The Importance of Visualization',
+    'Data Manipulation: Introduction to the tidyverse: dplyr & tidyr',
+    'Descriptive Statistics in R: Introduction to plotting in the tidyverse: ggplot2',
+    'Descriptive Statistics'
+  ),
+  link = c(
+    'https://mluu921.github.io/cshs-fall-lecture-descriptive-statistics/#/descriptive-statistics',
+    'https://mluu921.github.io/cshs-bms510-data-manipulation-slides/#/data-manipulation-in-r',
+    'https://mluu921.github.io/cshs-bms510-ggplot2-slides/#/descriptive-statistics-in-r',
+    'https://mluu921.github.io/biostats_mrm615_descriptive/'
+  ),
+  desc = c(
+    'Talk presented at the annual CSHS Biostatistics Fall Lecture',
+    'Talk presented for the BMS510 course',
+    'Talk presented for the BMS510 course',
+    'Talk presented for the MRM615 course'
+  )
+)
 
-* Talk presented for the BMS510 course
+data <- data |>
+  mutate(title = glue::glue('<a href="{link}" target="_blank">{title}</a>')) |>
+  select(-link)
 
-```{r}
-knitr::include_url('https://mluu921.github.io/cshs-bms510-ggplot2-slides/#/descriptive-statistics-in-r')
-```
-
-# Descriptive Statistics
-
-* Talk presented for the MRM615 course
-
-```{r}
-knitr::include_url('https://mluu921.github.io/biostats_mrm615_descriptive/')
+data |>
+  gt() |>
+  fmt_url(columns = title) |>
+  cols_align(columns = title,
+             align = 'left') |> 
+  opt_interactive(use_compact_mode = TRUE) |> 
+  cols_label(
+    title = 'Title',
+    desc = 'Description'
+  )
 ```
 
