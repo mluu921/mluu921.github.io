@@ -1,5 +1,6 @@
 ---
 title: "Publications"
+date-modified: today
 echo: false
 warning: false
 message: false
@@ -62,9 +63,6 @@ tbl |>
            date_style = 'yMMM') |> 
   fmt_url(columns = title) |> 
   cols_align(columns = title, align = 'left') |> 
-  tab_header(
-    title = glue::glue('Last Updated: {Sys.Date()}')
-  ) |> 
   tab_options(
     heading.title.font.size = 30,
     heading.title.font.weight = 'bold'
