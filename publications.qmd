@@ -35,8 +35,10 @@ tbl <- tbl |>
   mutate(
     author = str_replace_all(author, ' and ', ', '),
     author = str_replace_all(author, 'Michael Luu', '**Michael Luu**'),
-    doi = glue::glue('https://doi.org/{doi}')
-  )
+    doi = glue::glue('https://doi.org/{doi}'),
+    title = glue::glue('<a href={doi}>{title}</a>')
+  ) |> 
+  select(-doi)
 
 tbl |> 
   gt() |> 
@@ -44,8 +46,7 @@ tbl |>
     date = 'Date',
     title = 'Title',
     author = 'Authors',
-    journal = 'Journal',
-    doi = 'DOI'
+    journal = 'Journal'
   ) |> 
   opt_interactive(
     use_search = TRUE,
@@ -59,8 +60,8 @@ tbl |>
   fmt_markdown(columns = author) |> 
   fmt_date(columns = date,
            date_style = 'yMMM') |> 
-  fmt_url(columns = doi) |> 
-  cols_align(columns = doi, align = 'left') |> 
+  fmt_url(columns = title) |> 
+  cols_align(columns = title, align = 'left') |> 
   tab_header(
     title = glue::glue('Last Updated: {Sys.Date()}')
   ) |> 
