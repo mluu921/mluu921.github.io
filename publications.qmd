@@ -24,7 +24,7 @@ data <- data |> as_tibble()
 ```
 
 ```{r}
-#| column: page
+#| column: screen-inset
 
 tbl <- data |>
   select(title, author, year, month, journal, doi) |>
@@ -63,6 +63,10 @@ tbl |>
            date_style = 'yMMM') |> 
   fmt_url(columns = title) |> 
   cols_align(columns = title, align = 'left') |> 
+  cols_width(
+    title ~ px(500),
+    date ~ px(100)
+  ) |> 
   tab_options(
     heading.title.font.size = 30,
     heading.title.font.weight = 'bold'
