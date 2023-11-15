@@ -446,8 +446,7 @@ ul.task-list li input[type="checkbox"] {
   let editor;
   require(['vs/editor/editor.main'], function () {
     editor = monaco.editor.create(editorDiv, {
-      value: `webr::install("broom")
-webr::install("gt")`,
+      value: `webr::install("broom")`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks
@@ -731,13 +730,12 @@ webr::install("gt")`,
     editor = monaco.editor.create(editorDiv, {
       value: `
 library(broom)
-library(gt)
 
 fit <- lm(mpg ~ wt, data = mtcars)
 
 res <- tidy(fit)
 
-gt(res)`,
+res`,
       language: 'r',
       theme: 'vs-light',
       automaticLayout: true,           // TODO: Could be problematic for slide decks

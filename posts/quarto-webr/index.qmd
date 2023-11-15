@@ -16,7 +16,6 @@ Before a specific R package can be utilized, we will need to 'install' the WebR 
 
 ```{webr-r}
 webr::install("broom")
-webr::install("gt")
 ```
 
 Once the WebR package has been installed, we can load the library as we normally would.
@@ -24,12 +23,11 @@ Once the WebR package has been installed, we can load the library as we normally
 ```{webr-r}
 
 library(broom)
-library(gt)
 
 fit <- lm(mpg ~ wt, data = mtcars)
 
 res <- tidy(fit)
 
-gt(res)
+res
 
 ```
