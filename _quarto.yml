@@ -18,5 +18,9 @@ format:
     theme: litera
     css: styles.css
 
-
+# Enable webR on all post pages
+webr:
+  channel-type: 'post-message'
+filters:
+  - webr
 

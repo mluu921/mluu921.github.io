@@ -1,0 +1,35 @@
+---
+title: "Implementation of WebR in Quarto"
+date: today
+image: "https://docs.r-wasm.org/webr/latest/images/webR.png"
+---
+
+WebR is a web implementation of the R statistical software in a web browser built using the Node.js and WebAssembly framework. The [official documentation](https://docs.r-wasm.org/webr/latest/) will have a better explanation of how WebR works. However, the gist of WebR is the ability to run R code directly in the web browser, without the need of installing R or running code on a server.
+
+The purpose of this blog post is to provide a baseline example implementation of WebR in Quarto. The example instructions provided here is based on the the following [github](https://github.com/coatless/quarto-webr/tree/main/examples) example by James J Balamuta, the developer of the [webr quarto extension](https://quarto-webr.thecoatlessprofessor.com/).
+
+The below code chunk will construct a section of the rendered quarto document where R code can be ran directly in the browser. Although the development of WebR is still early, the ability to run R code directly in the browser, and without the need of a server or additional infrastructure is a very power tool.
+
+Some of the current limitations of WebR is speed, and the need to 'install' packages to prime the WebR environment. I can only imagine that issue with speed will only improve in due time. Packages will also need to be specifically compiled for WebAssembly. The current default repository for R packages compiled for WebR can be found [here](https://repo.r-wasm.org/).
+
+Before a specific R package can be utilized, we will need to 'install' the WebR compiled version of the package in a WebR environment like so.
+
+```{webr-r}
+webr::install("broom")
+webr::install("gt")
+```
+
+Once the WebR package has been installed, we can load the library as we normally would.
+
+```{webr-r}
+
+library(broom)
+library(gt)
+
+fit <- lm(mpg ~ wt, data = mtcars)
+
+res <- tidy(fit)
+
+gt(res)
+
+```
