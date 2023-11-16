@@ -3,9 +3,17 @@ title: "Implementation of ShinyLive in Quarto"
 date: "11/15/2023"
 ---
 
-The following blogpost is an example implementation of ShinyLive. A traditional Shiny application requires a Shiny Server for computation, that handles both the computation and serving the application to the user. The inverse is true with the implementation of ShinyLive and WebR, where the application can be hosted on a static web server similar to GitHub Pages, and the computation is handled by the user themselves. The following blogpost is an example of how to implement ShinyLive in Quarto using the [shinylive-quarto extension](https://quarto-ext.github.io/shinylive/).
+The following blogpost is an example implementation of ShinyLive. A traditional Shiny application requires a Shiny Server for computation, that handles both the computation and serving the application to the user.
 
-The source code for the following blogpost can be found here
+![](https://shiny.posit.co/py/docs/shinylive-shiny-deployment-model.png){fig-align="center"}
+
+The inverse is true with the implementation of ShinyLive and WebR, where the application can be hosted on a static web server similar to GitHub Pages, and the computation is handled by the user themselves.
+
+![](https://shiny.posit.co/py/docs/shinylive-shinylive-deployment-model.png){fig-align="center"}
+
+The current blogpost is an example implementation of ShinyLive in Quarto using the [shinylive-quarto extension](https://quarto-ext.github.io/shinylive/). Source code for the current blogpost can be found [here](https://github.com/mluu921/mluu921.github.io/blob/master/posts/quarto-shinylive/index.qmd).
+
+More information regarding the implementation of shinylive can be found [here](https://shiny.posit.co/py/docs/shinylive.html).
 
 ```{shinylive-r}
 #| standalone: true
