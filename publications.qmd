@@ -33,6 +33,8 @@ data <- data |> as_tibble()
 
 ```
 
+Complete bib file can be downloaded [here](https://github.com/mluu921/mluu921.github.io/blob/master/publications.bib).
+
 ```{r}
 #| column: screen-inset
 
@@ -83,4 +85,3 @@ tbl |>
     heading.title.font.weight = 'bold'
   )
 ```
-
