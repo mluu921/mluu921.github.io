@@ -23,4 +23,5 @@ webr:
   channel-type: 'post-message'
 filters:
   - webr
+  - shinylive
 

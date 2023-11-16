@@ -44,52 +44,46 @@ out
 
 Instead of presenting a long list of plots, we can organize the plots into individual tabs. In order to do this, we utilize a combination of `imap_chr()` and `knit_child()`. We use `imap_chr()` to pass on individual plots into `knit_child()`. We wrap this chunk within a fenced div `panel-tabset`, and utilize `results: asis`.
 
-````{verbatim}
-::: panel-tabset
 ```{r}
-#| results: asis
+#| eval: false
+#| echo: fenced
+
 out <- imap_chr(out, \(out, title) {
   
-  text <- glue::glue("## `r title`
-                      ```{{{r}}}
-                      out
-                      ```")
+  text <- glue::glue("## `r title`",
+                     "```{{r}}",
+                     "out",
+                     "```",
+                     "", .sep = '\n\n')
   
   knitr::knit_child(text = text, envir = environment(),
                     quiet = T)
   
 })
 
-cat(out, sep = ' ')
+cat(out, sep = '\n')
 ```
-:::
-````
 
 ::: panel-tabset
 ```{r}
 #| results: asis
+
 out <- imap_chr(out, \(out, title) {
   
-  text <- glue::glue("## `r title`
-```{{r}}
-out
-```")
+  text <- glue::glue("## `r title`",
+                     "```{{r}}",
+                     "out",
+                     "```",
+                     "", .sep = '\n\n')
   
   knitr::knit_child(text = text, envir = environment(),
                     quiet = T)
   
 })
 
-cat(out, sep = ' ')
+cat(out, sep = '\n')
 ```
 :::
-
-# Session info
-```{r}
-sessionInfo()
-```
-
-
 
 
 
