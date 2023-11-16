@@ -22,12 +22,7 @@ Once the WebR package has been installed, we can load the library as we normally
 
 ```{webr-r}
 
-library(broom)
-
 fit <- lm(mpg ~ wt, data = mtcars)
 
-res <- tidy(fit)
-
-res
-
+summary(fit)
 ```
