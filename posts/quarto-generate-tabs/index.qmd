@@ -45,8 +45,8 @@ out
 Instead of presenting a long list of plots, we can organize the plots into individual tabs. In order to do this, we utilize a combination of `imap_chr()` and `knit_child()`. We use `imap_chr()` to pass on individual plots into `knit_child()`. We wrap this chunk within a fenced div `panel-tabset`, and utilize `results: asis`.
 
 ```{r}
-#| eval: false
 #| echo: fenced
+#| eval: false
 
 out <- imap_chr(out, \(out, title) {
   
@@ -66,6 +66,8 @@ cat(out, sep = '\n')
 
 ::: panel-tabset
 ```{r}
+#| eval: true
+#| echo: fenced
 #| results: asis
 
 out <- imap_chr(out, \(out, title) {
