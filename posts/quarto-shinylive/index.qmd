@@ -3,7 +3,9 @@ title: "Implementation of ShinyLive in Quarto"
 date: "11/15/2023"
 ---
 
-The following blogpost is an example implementation of ShinyLive. A traditional Shiny application requires a Shiny Server for computation, that handles both the computation and serving the application to the user.
+The following blogpost is an example implementation of ShinyLive.
+
+A traditional Shiny application requires a Shiny Server for computation, that handles both the computation and serving the application to the user.
 
 ![](https://shiny.posit.co/py/docs/shinylive-shiny-deployment-model.png){fig-align="center"}
 
