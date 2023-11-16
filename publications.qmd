@@ -56,7 +56,8 @@ tbl |>
     use_highlight = TRUE,
     use_compact_mode = TRUE,
     use_text_wrapping = TRUE,
-    use_page_size_select = TRUE
+    use_page_size_select = TRUE,
+    page_size_default = 25
   ) |> 
   fmt_markdown(columns = author) |> 
   fmt_date(columns = date,
