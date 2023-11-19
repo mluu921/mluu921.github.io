@@ -1,0 +1,15 @@
+{
+  "hash": "7e68f3cf9109bd04f967941a0120f90c",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Secret Santa Randomizer using ShinyLive 🎅🎄🎁\"\ndate: '11/19/2023'\nimage: 'https://images.unsplash.com/photo-1607966486807-98e5395c5ab9?q=80&w=3323&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'\n---\n\n\nIt's the time of year for giving 🎅🎄🎁\n\nThe purpose of this post is to showcase a simple Secret Santa Randomizer built using [Shiny](https://www.rstudio.com/products/shiny/), the [bslib](https://rstudio.github.io/bslib/) dashboard framework, and [ShinyLive](https://shinylive.io/r/examples/) (a server-less Shiny implementation).\n\nThe source code for this application can be found [here](https://github.com/mluu921/secret-santa).\n\n\n::: {.cell}\n<iframe src=\"https://michaelluu.info/secret-santa?showcase=0\" width=\"100%\" height=\"600\" data-external=\"1\"></iframe>\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

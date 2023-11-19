@@ -1,0 +1,17 @@
+{
+  "hash": "050fa2e42b12108e16856565fe595f08",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Programatically generate Quarto tabs\"\ndescription: \"Utilizing purrr to programatically generate tabs to organize and present a large list of outputs\"\ndate: '4-13-2023'\nimage: featured.jpg\ndraft: false\neditor_options: \n  chunk_output_type: console\n---\n\n\n\n\nWhen working with a list of objects, it may be useful to organize the objects into tabs instead of a huge list of individual objects\n\nUsing the `iris` dataset as a working example, I generate a list of ggplot objects.\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndata <- iris |> as_tibble() |> janitor::clean_names()\n\nout <- data |> \n  group_nest(species) |> \n  deframe()\n\nout <- out |> \n  map(\\(data) {\n    \n    ggplot(data, aes(x = sepal_length, y = sepal_width)) + \n      geom_point()\n    \n  })\n```\n:::\n\n\nThe list of ggplot2 objects can be called and presented as below\n\n\n::: {.cell}\n\n```{.r .cell-code}\nout\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n$setosa\n```\n\n\n:::\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n\n::: {.cell-output .cell-output-stdout}\n\n```\n\n$versicolor\n```\n\n\n:::\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-3-2.png){width=672}\n:::\n\n::: {.cell-output .cell-output-stdout}\n\n```\n\n$virginica\n```\n\n\n:::\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-3-3.png){width=672}\n:::\n:::\n\n\nInstead of presenting a long list of plots, we can organize the plots into individual tabs. In order to do this, we utilize a combination of `imap_chr()` and `knit_child()`. We use `imap_chr()` to pass on individual plots into `knit_child()`. We wrap this chunk within a fenced div `panel-tabset`, and utilize `results: asis`.\n\n\n::: {.cell}\n\n````{.cell-code}\n```{{r}}\n#| eval: false\n\nout <- imap_chr(out, \\(out, title) {\n  \n  text <- glue::glue(\"## `r title`\",\n                     \"```{{r}}\",\n                     \"out\",\n                     \"```\",\n                     \"\", .sep = '\\n\\n')\n  \n  knitr::knit_child(text = text, envir = environment(),\n                    quiet = T)\n  \n})\n\ncat(out, sep = '\\n')\n```\n````\n:::\n\n\n::: panel-tabset\n\n\n````{.cell-code}\n```{{r}}\nout <- imap_chr(out, \\(out, title) {\n  \n  text <- glue::glue(\"## `r title`\",\n                     \"```{{r}}\",\n                     \"out\",\n                     \"```\",\n                     \"\", .sep = '\\n\\n')\n  \n  knitr::knit_child(text = text, envir = environment(),\n                    quiet = T)\n  \n})\n\ncat(out, sep = '\\n')\n```\n````\n\n\n## setosa\n\n::: {.cell}\n\n```{.r .cell-code}\nout\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-11-1.png){width=672}\n:::\n:::\n\n\n## versicolor\n\n::: {.cell}\n\n```{.r .cell-code}\nout\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-14-1.png){width=672}\n:::\n:::\n\n\n## virginica\n\n::: {.cell}\n\n```{.r .cell-code}\nout\n```\n\n::: {.cell-output-display}\n![](index_files/figure-html/unnamed-chunk-17-1.png){width=672}\n:::\n:::\n\n:::\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

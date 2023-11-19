@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/secret-santa-shinylive/index.html",
       "/posts/quarto-shinylive/index.html",
       "/posts/quarto-webr/index.html",
       "/posts/meta-programming/index.html",

@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Michael Luu">
+<meta name="dcterms.date" content="2023-11-19">
 
-<title>Michael Luu, MPH - Blog</title>
+<title>Michael Luu, MPH - Secret Santa Randomizer using ShinyLive 🎅🎄🎁</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +25,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -67,50 +67,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Michael Luu, MPH</span>
     </a>
   </div>
@@ -121,15 +90,15 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./blog.html" aria-current="page"> 
+    <a class="nav-link" href="../../blog.html"> 
 <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./publications.html"> 
+    <a class="nav-link" href="../../publications.html"> 
 <span class="menu-text">Publications</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./presentations.html"> 
+    <a class="nav-link" href="../../presentations.html"> 
 <span class="menu-text">Presentations</span></a>
   </li>  
   <li class="nav-item compact">
@@ -150,325 +119,56 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Secret Santa Randomizer using ShinyLive 🎅🎄🎁</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Michael Luu </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 19, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(10)</span></div></div></div>
+    
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Blog</h1>
-</div>
-
-
-
-<div class="quarto-title-meta">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<p>It’s the time of year for giving 🎅🎄🎁</p>
+<p>The purpose of this post is to showcase a simple Secret Santa Randomizer built using <a href="https://www.rstudio.com/products/shiny/">Shiny</a>, the <a href="https://rstudio.github.io/bslib/">bslib</a> dashboard framework, and <a href="https://shinylive.io/r/examples/">ShinyLive</a> (a server-less Shiny implementation).</p>
+<p>The source code for this application can be found <a href="https://github.com/mluu921/secret-santa">here</a>.</p>
+<div class="cell">
+<iframe src="https://michaelluu.info/secret-santa?showcase=0" width="100%" height="600" data-external="1">
+</iframe>
+</div>
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1700380800000" data-listing-file-modified-sort="1700431650993" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="49">
-<div class="thumbnail">
-<p><a href="./posts/secret-santa-shinylive/index.html"></a></p><a href="./posts/secret-santa-shinylive/index.html">
-<p><img src="https://images.unsplash.com/photo-1607966486807-98e5395c5ab9?q=80&amp;w=3323&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="thumbnail-image"></p>
-</a><p><a href="./posts/secret-santa-shinylive/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/secret-santa-shinylive/index.html">Secret Santa Randomizer using ShinyLive 🎅🎄🎁</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/secret-santa-shinylive/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/secret-santa-shinylive/index.html">It’s the time of year for giving 🎅🎄🎁</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/secret-santa-shinylive/index.html">
-<div class="listing-date">
-Nov 19, 2023
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1700035200000" data-listing-file-modified-sort="1700169451761" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="454">
-<div class="thumbnail">
-<p><a href="./posts/quarto-shinylive/index.html"></a></p><a href="./posts/quarto-shinylive/index.html">
-<p><img src="https://shiny.posit.co/py/docs/shinylive-shinylive-deployment-model.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/quarto-shinylive/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/quarto-shinylive/index.html">Implementation of ShinyLive in Quarto</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/quarto-shinylive/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/quarto-shinylive/index.html">The following blogpost is an example implementation of ShinyLive.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/quarto-shinylive/index.html">
-<div class="listing-date">
-Nov 15, 2023
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-date-sort="1700035200000" data-listing-file-modified-sort="1700160457290" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="261">
-<div class="thumbnail">
-<p><a href="./posts/quarto-webr/index.html"></a></p><a href="./posts/quarto-webr/index.html">
-<p><img src="https://docs.r-wasm.org/webr/latest/images/webR.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/quarto-webr/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/quarto-webr/index.html">Implementation of WebR in Quarto</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/quarto-webr/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/quarto-webr/index.html">WebR is a web implementation of the R statistical software in a web browser built using the Node.js and WebAssembly framework. The official documentation will have a better…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/quarto-webr/index.html">
-<div class="listing-date">
-Nov 15, 2023
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1683702000000" data-listing-file-modified-sort="1700085082139" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="330">
-<div class="thumbnail">
-<p><a href="./posts/meta-programming/index.html"></a></p><a href="./posts/meta-programming/index.html">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/meta-programming/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/meta-programming/index.html">Meta-programming with R and rlang</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/meta-programming/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/meta-programming/index.html"><code>rlang</code> is a powerful R package that allows the coder the ability to write code with code. The amazing book Advanced R by Hadley Wickham goes into this idea in much greater…<code></code><code></code></a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/meta-programming/index.html">
-<div class="listing-date">
-May 10, 2023
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-listing-date-sort="1681369200000" data-listing-file-modified-sort="1700169451760" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="437">
-<div class="thumbnail">
-<p><a href="./posts/quarto-generate-tabs/index.html"></a></p><a href="./posts/quarto-generate-tabs/index.html">
-<p><img src="./posts/quarto-generate-tabs/featured.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/quarto-generate-tabs/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/quarto-generate-tabs/index.html">Programatically generate Quarto tabs</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/quarto-generate-tabs/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/quarto-generate-tabs/index.html">Utilizing purrr to programatically generate tabs to organize and present a large list of outputs</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/quarto-generate-tabs/index.html">
-<div class="listing-date">
-Apr 13, 2023
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-listing-date-sort="1681369200000" data-listing-file-modified-sort="1700073361483" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="232">
-<div class="thumbnail">
-<p><a href="./posts/retrieve-pubmed-publications/index.html"></a></p><a href="./posts/retrieve-pubmed-publications/index.html">
-<p class="card-img-top"><img src="posts\retrieve-pubmed-publications\index_files\figure-html\unnamed-chunk-3-1.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/retrieve-pubmed-publications/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/retrieve-pubmed-publications/index.html">Retrieve Pubmed publications using the RefManageR package</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/retrieve-pubmed-publications/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/retrieve-pubmed-publications/index.html">For anyone that’s working in academia, it may be useful to keep a tabulation of all of the publications that you are a co-author of. We can use the <code>RefManageR</code> package, which…<code></code></a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/retrieve-pubmed-publications/index.html">
-<div class="listing-date">
-Apr 13, 2023
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-listing-date-sort="1602658800000" data-listing-file-modified-sort="1700073361470" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1135">
-<div class="thumbnail">
-<p><a href="./posts/ggplot2-km/index.html"></a></p><a href="./posts/ggplot2-km/index.html">
-<p><img src="./posts/ggplot2-km/featured.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/ggplot2-km/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ggplot2-km/index.html">Publication Quality Kaplan-Meier Survival Curves using ggplot2</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ggplot2-km/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/ggplot2-km/index.html">The Kaplan-Meier (KM) survival curves are a hallmark figure that is commonly used to illustrate “time to event” analysis in clinical research. In this illustrative example, I will be using the <code>veterans</code> data from the <code>survival</code> package to construct KM survival curves using <code>ggplot2</code> and building the figure from basic geoms within the package.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/ggplot2-km/index.html">
-<div class="listing-date">
-Oct 14, 2020
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-listing-date-sort="1602054000000" data-listing-file-modified-sort="1700073361480" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2022">
-<div class="thumbnail">
-<p><a href="./posts/my-life-in-months/index.html"></a></p><a href="./posts/my-life-in-months/index.html">
-<p><img src="./posts/my-life-in-months/featured.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/my-life-in-months/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/my-life-in-months/index.html">My life in Months - Making a ‘life plot’ in R using ggplot2</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/my-life-in-months/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/my-life-in-months/index.html">This blog post is inspired by <span>Sharla Gefland</span> twitter post found <span>here</span>, where she made a ‘My Life in Months’ plot. </a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/my-life-in-months/index.html">
-<div class="listing-date">
-Oct 7, 2020
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-listing-date-sort="1601794800000" data-listing-file-modified-sort="1700090693688" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="814">
-<div class="thumbnail">
-<p><a href="./posts/leaflet-covid19-mask-usage/index.html"></a></p><a href="./posts/leaflet-covid19-mask-usage/index.html">
-<p><img src="./posts/leaflet-covid19-mask-usage/leafletmap.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/leaflet-covid19-mask-usage/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/leaflet-covid19-mask-usage/index.html">Recreating the New York Times mask utilization survey data with the R opensource Leaflet package</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/leaflet-covid19-mask-usage/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/leaflet-covid19-mask-usage/index.html">Recreating the New York Times mask utilization survey data with the R opensource Leaflet package</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/leaflet-covid19-mask-usage/index.html">
-<div class="listing-date">
-Oct 4, 2020
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="9" data-listing-date-sort="1601622000000" data-listing-file-modified-sort="1700073361480" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="869">
-<div class="thumbnail">
-<p><a href="./posts/nlp-taylor-swift-beyonce/index.html"></a></p><a href="./posts/nlp-taylor-swift-beyonce/index.html">
-<p class="card-img-top"><img src="posts\nlp-taylor-swift-beyonce\index_files\figure-html\unnamed-chunk-9-1.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/nlp-taylor-swift-beyonce/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/nlp-taylor-swift-beyonce/index.html">Natural Language Processing (NLP) and developing a machine learning classifier on Beyonce and Taylor Swift lyrics #TidyTuesday</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/nlp-taylor-swift-beyonce/index.html"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/nlp-taylor-swift-beyonce/index.html">NLP and building a machine learning clasifier on Beyonce and Taylor Swift Lyrics #TidyTuesday</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/nlp-taylor-swift-beyonce/index.html">
-<div class="listing-date">
-Oct 2, 2020
-</div>
-<div class="listing-author">
-Michael Luu
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
