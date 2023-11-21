@@ -3,6 +3,10 @@ title: "Natural Language Processing (NLP) and developing a machine learning clas
 description: 'NLP and building a machine learning clasifier on Beyonce and Taylor Swift Lyrics #TidyTuesday'
 date: '2020-10-02'
 toc: true
+categories:
+  - nlp
+  - machine learning
+  - tidymodels
 ---
 
 

@@ -3,6 +3,8 @@ title: "Retrieve Pubmed publications using the RefManageR package"
 date: "4/13/2023"
 editor_options: 
   chunk_output_type: console
+categories:
+  - programming
 ---
 
 ```{r}

@@ -6,6 +6,9 @@ image: featured.jpg
 draft: false
 editor_options: 
   chunk_output_type: console
+categories:
+  - quarto
+  - programming
 ---
 
 ```{r}

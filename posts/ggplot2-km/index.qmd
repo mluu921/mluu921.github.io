@@ -4,6 +4,9 @@ date: '2020-10-14'
 description: 'The Kaplan-Meier (KM) survival curves are a hallmark figure that is commonly used to illustrate "time to event" analysis in clinical research. In this illustrative example, I will be using the `veterans` data from the `survival` package to construct KM survival curves using `ggplot2` and building the figure from basic geoms within the package.'
 toc: false
 image: featured.jpg
+categories:
+  - visualization
+  - survival analysis
 ---
 
 ```{r setup, include=FALSE}

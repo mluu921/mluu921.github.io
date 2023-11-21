@@ -2,6 +2,9 @@
 title: "Implementation of WebR in Quarto"
 date: "11/15/2023"
 image: "https://docs.r-wasm.org/webr/latest/images/webR.png"
+categories:
+  - quarto
+  - webr
 ---
 
 WebR is a web implementation of the R statistical software in a web browser built using the Node.js and WebAssembly framework. The [official documentation](https://docs.r-wasm.org/webr/latest/) will have a better explanation of how WebR works. However, the gist of WebR is the ability to run R code directly in the web browser, without the need of installing R or running code on a server.

@@ -4,6 +4,8 @@ description: "This blog post is inspired by [Sharla Gefland](https://twitter.com
 date: '2020-10-07'
 toc: false
 image: featured.jpg
+categories:
+  - visualization
 ---
 
 ```{r}

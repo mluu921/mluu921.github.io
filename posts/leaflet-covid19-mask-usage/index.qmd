@@ -3,6 +3,8 @@ title: "Recreating the New York Times mask utilization survey data with the R op
 date: '2020-10-04'
 description: "Recreating the New York Times mask utilization survey data with the R opensource Leaflet package"
 image: leafletmap.jpg
+categories:
+  - visualization
 ---
 
 ```{r setup, include=F}
