@@ -1,0 +1,155 @@
+---
+title: "Principal Component Analysis (PCA) of Taylor Swift Discography"
+date: '11/20/2023'
+warning: false
+message: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+library(tidyverse)
+library(tidytuesdayR)
+library(tidymodels)
+library(plotly)
+library(rlang)
+library(tidytext)
+
+theme_set(
+  theme_minimal(
+    base_size = 15
+  )
+)
+
+```
+
+This is a quick PCA analysis of Taylor Swift's discography using the dataset from the tidytuesday 2023, week 42.
+
+We start off with loading the data using the `tidytuesdayR` package. We are aslo going to download the data using the `tt_download` function. The specific dataset we are using is the `taylor_all_songs` dataset.
+
+```{r}
+datas <- tt_load_gh(2023, 42)
+
+datas <- tt_download(datas)
+
+data <- datas$taylor_all_songs
+```
+
+Next we are going to take a quick glimpse at the data to see what we are working with.
+
+```{r}
+glimpse(data)
+```
+
+We are now going to select the columns to use for the PCA analysis. We are going to extract the columns containing various attributes of the songs. We are going to use the `track_name` column as the response variable and the rest of the columns as the predictors. Any rows with missing values are going to be dropped from the analysis.
+
+The PCA analysis is done using the `recipes` package. The first step is to create a recipe using the `recipe` function. The `recipe` function takes in a formula and a dataset. The LHS  is the response variable and the RHS is the predictors. The next step is to normalize the data using the `step_normalize` function. This function centers and scales the numeric predictors. The next step is to do the PCA analysis using the `step_pca` function. The `step_pca` function takes in the columns that we want to use for the PCA analysis, and we also defines the number of components that we want to extract. The last step is to prep the recipe using the `prep` function.
+
+```{r}
+data <- data |>
+  select(
+    track_name,
+    danceability,
+    energy,
+    key,
+    loudness,
+    speechiness,
+    acousticness,
+    instrumentalness,
+    liveness,
+    valence,
+    tempo,
+    duration_ms
+  ) |> drop_na()
+
+rec <- recipe(track_name ~ ., data = data) |> 
+  step_normalize(all_numeric_predictors()) |> 
+  step_pca(all_numeric_predictors(), num_comp = 5) |> 
+  prep()
+```
+
+After conducting the PCA analysis, we are going to take a look at the proportino of variances that are explained by each component. We can see that the first component explains 26% of the variance, the second component explains 15% of the variance, the third component explains 11% of the variance. The first two component explains 42% of the cumulative variances.
+
+```{r}
+#| fig-height: 8
+#| fig-width: 10
+
+local({
+  pca <- rec$steps[[2]]$res |> summary()
+  
+  plot_data <- pca$importance |> as_tibble(rownames = 'type')
+  
+  plot <- plot_data |>
+    pivot_longer(2:ncol(plot_data)) |>
+    filter(type == 'Proportion of Variance') |>
+    mutate(name = as_factor(name)) |> 
+    ggplot(aes(x = name, y = value)) +
+    geom_col() +
+    labs(y = 'Proportion of Variance', x = NULL) +
+    scale_y_continuous(labels = scales::label_percent())
+  
+  plot
+})
+```
+
+We are now going to take a look at the various attributes of the songs that are associated with each component. 
+
+We can see that the first component is associated with the energy, loudness, acousticness of the songs. The second component is associated with the danceability, duration, and speechiness of the songs.
+
+```{r}
+#| fig-height: 8
+#| fig-width: 10
+
+tidy(rec, 2) |>
+  filter(component %in% paste0('PC', 1:5)) |>
+  mutate(positive = ifelse(value > 0, 'Positive', 'Negative')) |> 
+  mutate(value = abs(value)) |>
+  
+  ggplot(aes(x = value, y = reorder_within(terms, value, component), fill = positive)) +
+  geom_col() +
+  scale_y_reordered() +
+  facet_wrap(~ component, scales = 'free') +
+  theme_minimal(base_size = 15) + 
+  theme(legend.position = 'bottom') +
+  labs(x = 'Absolute Value of Coefficient', y = NULL, fill = NULL)
+
+```
+
+Finally, we are going to visualize the first two components using a scatter plot. Based on the attributes that we have seen in the previous plot, we can see that a higher PC1 is associated with higher energy, loudness, and positivity (valence). A more negative PC1 is associated with higher acousticness, duration, and instrumentalness. A higher PC2 is associated with lengthier songs, higher temp, and loudness, while a more negative PC2 is associated with higher danceability, speechiness, and positivity (valence)
+
+```{r}
+#| fig-height: 8
+#| fig-width: 10
+  
+make_pc_plot <- \(data, pc_x, pc_y) {
+  pc_x <- parse_expr(pc_x)
+  pc_y <- parse_expr(pc_y)
+  
+  p <- expr({
+    ggplot(pca_plot, aes(
+      x = !!pc_x,
+      y = !!pc_y,
+      color = track_name
+    )) +
+      geom_point() +
+      theme_minimal(base_size = 15) +
+      theme(legend.position = "none") +
+      coord_cartesian(xlim = c(-6, 6), ylim = c(-6, 6)) +
+      geom_hline(yintercept = 0,
+                 linetype = 'dashed',
+                 alpha = .25) +
+      geom_vline(xintercept = 0,
+                 linetype = 'dashed',
+                 alpha = .25)
+    
+  }) |> eval()
+  
+  ggplotly(p, tooltip = 'track_name')
+  
+}
+  
+pca_plot <- bake(rec, new_data = NULL)
+
+make_pc_plot(pca_plot, 'PC2', 'PC1')
+
+```
