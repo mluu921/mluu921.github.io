@@ -8,6 +8,7 @@ editor_options:
   chunk_output_type: console
 categories:
   - programming
+image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 ---
 
 `rlang` is a powerful R package that allows the coder the ability to write code with code. The amazing book [Advanced R](https://adv-r.hadley.nz/index.html) by Hadley Wickham goes into this idea in much greater detail, but I wanted to present a small example of my favorite function `parse_expr()` from the `rlang` package in this post.
