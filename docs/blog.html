@@ -77,9 +77,9 @@ ul.task-list li input[type="checkbox"] {
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-title','listing-author','listing-date','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
+      searchColumns: ["listing-title","listing-author","listing-date","listing-image","listing-description","listing-categories"],
     };
 
     window['quarto-listings'] = window['quarto-listings'] || {};
@@ -182,21 +182,43 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="tidytuesday,leaflet,gis,visualization" data-listing-date-sort="1700553600000" data-listing-file-modified-sort="1700612191204" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="189">
-<div class="thumbnail">
-<p><a href="./posts/haunted-places/index.html"></a></p><a href="./posts/haunted-places/index.html">
-<p><img src="https://images.unsplash.com/photo-1481018085669-2bc6e4f00eed?q=80&amp;w=3072&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="thumbnail-image"></p>
-</a><p><a href="./posts/haunted-places/index.html"></a></p>
+<div class="quarto-listing quarto-listing-container-grid" id="listing-listing">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-title" data-direction="asc">
+          Title
+        </option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-author" data-direction="asc">
+          Author
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
 </div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/haunted-places/index.html">Haunted Los Angeles - Interactive Mapping using Leaflet</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/haunted-places/index.html"></a>
-</div>
+<div class="list grid quarto-listing-cols-3">
+<div class="g-col-1" data-index="0" data-categories="tidytuesday,leaflet,gis,visualization" data-listing-date-sort="1700553600000" data-listing-file-modified-sort="1700612191204" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="189">
+<a href="./posts/haunted-places/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="https://images.unsplash.com/photo-1481018085669-2bc6e4f00eed?q=80&amp;w=3072&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Haunted Los Angeles - Interactive Mapping using Leaflet
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('tidytuesday'); return false;">
 tidytuesday
@@ -211,34 +233,29 @@ gis
 visualization
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/haunted-places/index.html">The following blog post is a very simple visualization using the data from tidytuesday 2023, week 41. This visualization uses the leaflet library to produce a very simple…</a>
+<div class="card-text listing-description">
+The following blog post is a very simple visualization using the data from tidytuesday 2023, week 41. This visualization uses the leaflet library to produce a very simple…
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/haunted-places/index.html">
-<div class="listing-date">
-Nov 21, 2023
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
+<div class="listing-date">
+Nov 21, 2023
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="tidytuesday,visualization,pca" data-listing-date-sort="1700467200000" data-listing-file-modified-sort="1700589834040" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1021">
-<div class="thumbnail">
-<p><a href="./posts/taylor-swift-pca/index.html"></a></p><a href="./posts/taylor-swift-pca/index.html">
-<p class="card-img-top"><img src="posts\taylor-swift-pca\index_files\figure-html\unnamed-chunk-5-1.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/taylor-swift-pca/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/taylor-swift-pca/index.html">Principal Component Analysis (PCA) of Taylor Swift Discography</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/taylor-swift-pca/index.html"></a>
-</div>
+<div class="g-col-1" data-index="1" data-categories="tidytuesday,visualization,pca" data-listing-date-sort="1700467200000" data-listing-file-modified-sort="1700589834040" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1021">
+<a href="./posts/taylor-swift-pca/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top"><img src="posts\taylor-swift-pca\index_files\figure-html\unnamed-chunk-5-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Principal Component Analysis (PCA) of Taylor Swift Discography
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('tidytuesday'); return false;">
 tidytuesday
@@ -250,67 +267,61 @@ visualization
 pca
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/taylor-swift-pca/index.html">This is a quick PCA of Taylor Swift’s discography using the dataset from the tidytuesday 2023, week 42. PCA is a technique used to reduce high dimensional data into…</a>
+<div class="card-text listing-description">
+This is a quick PCA of Taylor Swift’s discography using the dataset from the tidytuesday 2023, week 42. PCA is a technique used to reduce high dimensional data into…
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/taylor-swift-pca/index.html">
-<div class="listing-date">
-Nov 20, 2023
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
+<div class="listing-date">
+Nov 20, 2023
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="shinylive" data-listing-date-sort="1700380800000" data-listing-file-modified-sort="1700590297538" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="49">
-<div class="thumbnail">
-<p><a href="./posts/secret-santa-shinylive/index.html"></a></p><a href="./posts/secret-santa-shinylive/index.html">
-<p><img src="https://images.unsplash.com/photo-1603793303277-ed67787545e5?q=80&amp;w=3870&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="thumbnail-image"></p>
-</a><p><a href="./posts/secret-santa-shinylive/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/secret-santa-shinylive/index.html">Secret Santa Randomizer using ShinyLive 🎅🎄🎁</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/secret-santa-shinylive/index.html"></a>
-</div>
+<div class="g-col-1" data-index="2" data-categories="shinylive" data-listing-date-sort="1700380800000" data-listing-file-modified-sort="1700590297538" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="49">
+<a href="./posts/secret-santa-shinylive/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="https://images.unsplash.com/photo-1603793303277-ed67787545e5?q=80&amp;w=3870&amp;auto=format&amp;fit=crop&amp;ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Secret Santa Randomizer using ShinyLive 🎅🎄🎁
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('shinylive'); return false;">
 shinylive
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/secret-santa-shinylive/index.html">It’s the time of year for giving 🎅🎄🎁</a>
+<div class="card-text listing-description">
+It’s the time of year for giving 🎅🎄🎁
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/secret-santa-shinylive/index.html">
-<div class="listing-date">
-Nov 19, 2023
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
+<div class="listing-date">
+Nov 19, 2023
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="shinylive,quarto" data-listing-date-sort="1700035200000" data-listing-file-modified-sort="1700590468836" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="454">
-<div class="thumbnail">
-<p><a href="./posts/quarto-shinylive/index.html"></a></p><a href="./posts/quarto-shinylive/index.html">
-<p><img src="https://shiny.posit.co/py/docs/shinylive-shinylive-deployment-model.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/quarto-shinylive/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/quarto-shinylive/index.html">Implementation of ShinyLive in Quarto</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/quarto-shinylive/index.html"></a>
-</div>
+<div class="g-col-1" data-index="3" data-categories="shinylive,quarto" data-listing-date-sort="1700035200000" data-listing-file-modified-sort="1700590468836" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="454">
+<a href="./posts/quarto-shinylive/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="https://shiny.posit.co/py/docs/shinylive-shinylive-deployment-model.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Implementation of ShinyLive in Quarto
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('shinylive'); return false;">
 shinylive
@@ -319,34 +330,31 @@ shinylive
 quarto
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/quarto-shinylive/index.html">The following blogpost is an example implementation of ShinyLive.</a>
+<div class="card-text listing-description">
+The following blogpost is an example implementation of ShinyLive.
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/quarto-shinylive/index.html">
-<div class="listing-date">
-Nov 15, 2023
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
+<div class="listing-date">
+Nov 15, 2023
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="quarto,webr" data-listing-date-sort="1700035200000" data-listing-file-modified-sort="1700590257994" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="261">
-<div class="thumbnail">
-<p><a href="./posts/quarto-webr/index.html"></a></p><a href="./posts/quarto-webr/index.html">
-<p><img src="https://docs.r-wasm.org/webr/latest/images/webR.png" class="thumbnail-image"></p>
-</a><p><a href="./posts/quarto-webr/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/quarto-webr/index.html">Implementation of WebR in Quarto</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/quarto-webr/index.html"></a>
-</div>
+<div class="g-col-1" data-index="4" data-categories="quarto,webr" data-listing-date-sort="1700035200000" data-listing-file-modified-sort="1700590257994" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="261">
+<a href="./posts/quarto-webr/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="https://docs.r-wasm.org/webr/latest/images/webR.png" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Implementation of WebR in Quarto
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('quarto'); return false;">
 quarto
@@ -355,67 +363,59 @@ quarto
 webr
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/quarto-webr/index.html">WebR is a web implementation of the R statistical software in a web browser built using the Node.js and WebAssembly framework. The official documentation will have a better…</a>
+<div class="card-text listing-description">
+WebR is a web implementation of the R statistical software in a web browser built using the Node.js and WebAssembly framework. The official documentation will have a better…
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/quarto-webr/index.html">
-<div class="listing-date">
-Nov 15, 2023
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
+<div class="listing-date">
+Nov 15, 2023
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="programming" data-listing-date-sort="1683702000000" data-listing-file-modified-sort="1700590131762" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="330">
-<div class="thumbnail">
-<p><a href="./posts/meta-programming/index.html"></a></p><a href="./posts/meta-programming/index.html">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/meta-programming/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/meta-programming/index.html">Meta-programming with R and rlang</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/meta-programming/index.html"></a>
-</div>
+<div class="g-col-1" data-index="5" data-categories="programming" data-listing-date-sort="1683702000000" data-listing-file-modified-sort="1700590131762" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="330">
+<a href="./posts/meta-programming/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Meta-programming with R and rlang
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
 programming
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/meta-programming/index.html"><code>rlang</code> is a powerful R package that allows the coder the ability to write code with code. The amazing book Advanced R by Hadley Wickham goes into this idea in much greater…<code></code><code></code></a>
+<div class="card-text listing-description">
+<code>rlang</code> is a powerful R package that allows the coder the ability to write code with code. The amazing book Advanced R by Hadley Wickham goes into this idea in much greater…<code></code><code></code>
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/meta-programming/index.html">
-<div class="listing-date">
-May 10, 2023
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
+<div class="listing-date">
+May 10, 2023
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="quarto,programming" data-listing-date-sort="1681369200000" data-listing-file-modified-sort="1700590206103" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="437">
-<div class="thumbnail">
-<p><a href="./posts/quarto-generate-tabs/index.html"></a></p><a href="./posts/quarto-generate-tabs/index.html">
-<p><img src="./posts/quarto-generate-tabs/featured.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/quarto-generate-tabs/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/quarto-generate-tabs/index.html">Programatically generate Quarto tabs</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/quarto-generate-tabs/index.html"></a>
-</div>
+<div class="g-col-1" data-index="6" data-categories="quarto,programming" data-listing-date-sort="1681369200000" data-listing-file-modified-sort="1700590206103" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="437">
+<a href="./posts/quarto-generate-tabs/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="./posts/quarto-generate-tabs/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Programatically generate Quarto tabs
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('quarto'); return false;">
 quarto
@@ -424,67 +424,59 @@ quarto
 programming
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/quarto-generate-tabs/index.html">Utilizing purrr to programatically generate tabs to organize and present a large list of outputs</a>
+<div class="card-text listing-description">
+Utilizing purrr to programatically generate tabs to organize and present a large list of outputs
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/quarto-generate-tabs/index.html">
-<div class="listing-date">
-Apr 13, 2023
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
+<div class="listing-date">
+Apr 13, 2023
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-categories="programming" data-listing-date-sort="1681369200000" data-listing-file-modified-sort="1700590277332" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="232">
-<div class="thumbnail">
-<p><a href="./posts/retrieve-pubmed-publications/index.html"></a></p><a href="./posts/retrieve-pubmed-publications/index.html">
-<p class="card-img-top"><img src="posts\retrieve-pubmed-publications\index_files\figure-html\unnamed-chunk-3-1.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/retrieve-pubmed-publications/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/retrieve-pubmed-publications/index.html">Retrieve Pubmed publications using the RefManageR package</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/retrieve-pubmed-publications/index.html"></a>
-</div>
+<div class="g-col-1" data-index="7" data-categories="programming" data-listing-date-sort="1681369200000" data-listing-file-modified-sort="1700590277332" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="232">
+<a href="./posts/retrieve-pubmed-publications/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top"><img src="posts\retrieve-pubmed-publications\index_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Retrieve Pubmed publications using the RefManageR package
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('programming'); return false;">
 programming
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/retrieve-pubmed-publications/index.html">For anyone that’s working in academia, it may be useful to keep a tabulation of all of the publications that you are a co-author of. We can use the <code>RefManageR</code> package, which…<code></code></a>
+<div class="card-text listing-description">
+For anyone that’s working in academia, it may be useful to keep a tabulation of all of the publications that you are a co-author of. We can use the <code>RefManageR</code> package, which…<code></code>
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/retrieve-pubmed-publications/index.html">
-<div class="listing-date">
-Apr 13, 2023
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
+<div class="listing-date">
+Apr 13, 2023
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-categories="visualization,survival analysis" data-listing-date-sort="1602658800000" data-listing-file-modified-sort="1700590072643" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1135">
-<div class="thumbnail">
-<p><a href="./posts/ggplot2-km/index.html"></a></p><a href="./posts/ggplot2-km/index.html">
-<p><img src="./posts/ggplot2-km/featured.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/ggplot2-km/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ggplot2-km/index.html">Publication Quality Kaplan-Meier Survival Curves using ggplot2</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ggplot2-km/index.html"></a>
-</div>
+<div class="g-col-1" data-index="8" data-categories="visualization,survival analysis" data-listing-date-sort="1602658800000" data-listing-file-modified-sort="1700590072643" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1135">
+<a href="./posts/ggplot2-km/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="./posts/ggplot2-km/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Publication Quality Kaplan-Meier Survival Curves using ggplot2
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('visualization'); return false;">
 visualization
@@ -493,100 +485,89 @@ visualization
 survival analysis
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/ggplot2-km/index.html">The Kaplan-Meier (KM) survival curves are a hallmark figure that is commonly used to illustrate “time to event” analysis in clinical research. In this illustrative example, I will be using the <code>veterans</code> data from the <code>survival</code> package to construct KM survival curves using <code>ggplot2</code> and building the figure from basic geoms within the package.</a>
+<div class="card-text listing-description">
+The Kaplan-Meier (KM) survival curves are a hallmark figure that is commonly used to illustrate “time to event” analysis in clinical research. In this illustrative example…
 </div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+Michael Luu
 </div>
-<div class="metadata">
-<a href="./posts/ggplot2-km/index.html">
 <div class="listing-date">
 Oct 14, 2020
 </div>
-<div class="listing-author">
-Michael Luu
+</div>
+</div>
 </div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="9" data-categories="visualization" data-listing-date-sort="1602054000000" data-listing-file-modified-sort="1700590150136" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2022">
-<div class="thumbnail">
-<p><a href="./posts/my-life-in-months/index.html"></a></p><a href="./posts/my-life-in-months/index.html">
-<p><img src="./posts/my-life-in-months/featured.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/my-life-in-months/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/my-life-in-months/index.html">My life in Months - Making a ‘life plot’ in R using ggplot2</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/my-life-in-months/index.html"></a>
-</div>
+<div class="g-col-1" data-index="9" data-categories="visualization" data-listing-date-sort="1602054000000" data-listing-file-modified-sort="1700590150136" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2022">
+<a href="./posts/my-life-in-months/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="./posts/my-life-in-months/featured.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+My life in Months - Making a ‘life plot’ in R using ggplot2
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('visualization'); return false;">
 visualization
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/my-life-in-months/index.html">This blog post is inspired by <span>Sharla Gefland</span> twitter post found <span>here</span>, where she made a ‘My Life in Months’ plot. </a>
+<div class="card-text listing-description">
+This blog post is inspired by <span>Sharla Gefland</span> twitter post found…
 </div>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+Michael Luu
 </div>
-<div class="metadata">
-<a href="./posts/my-life-in-months/index.html">
 <div class="listing-date">
 Oct 7, 2020
 </div>
-<div class="listing-author">
-Michael Luu
+</div>
+</div>
 </div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="10" data-categories="visualization" data-listing-date-sort="1601794800000" data-listing-file-modified-sort="1700590096996" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="814">
-<div class="thumbnail">
-<p><a href="./posts/leaflet-covid19-mask-usage/index.html"></a></p><a href="./posts/leaflet-covid19-mask-usage/index.html">
-<p><img src="./posts/leaflet-covid19-mask-usage/leafletmap.jpg" class="thumbnail-image"></p>
-</a><p><a href="./posts/leaflet-covid19-mask-usage/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/leaflet-covid19-mask-usage/index.html">Recreating the New York Times mask utilization survey data with the R opensource Leaflet package</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/leaflet-covid19-mask-usage/index.html"></a>
-</div>
+<div class="g-col-1" data-index="10" data-categories="visualization" data-listing-date-sort="1601794800000" data-listing-file-modified-sort="1700590096996" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="814">
+<a href="./posts/leaflet-covid19-mask-usage/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top">
+<img src="./posts/leaflet-covid19-mask-usage/leafletmap.jpg" class="thumbnail-image card-img" style="height: 150px;">
+</p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Recreating the New York Times mask utilization survey data with the R opensource Leaflet package
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('visualization'); return false;">
 visualization
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/leaflet-covid19-mask-usage/index.html">Recreating the New York Times mask utilization survey data with the R opensource Leaflet package</a>
+<div class="card-text listing-description">
+Recreating the New York Times mask utilization survey data with the R opensource Leaflet package
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/leaflet-covid19-mask-usage/index.html">
-<div class="listing-date">
-Oct 4, 2020
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
+<div class="listing-date">
+Oct 4, 2020
+</div>
+</div>
+</div>
+</div>
 </a>
 </div>
-</div>
-<div class="quarto-post image-right" data-index="11" data-categories="nlp,machine learning,tidymodels,tidytuesday" data-listing-date-sort="1601622000000" data-listing-file-modified-sort="1700602596084" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="869">
-<div class="thumbnail">
-<p><a href="./posts/nlp-taylor-swift-beyonce/index.html"></a></p><a href="./posts/nlp-taylor-swift-beyonce/index.html">
-<p class="card-img-top"><img src="posts\nlp-taylor-swift-beyonce\index_files\figure-html\unnamed-chunk-9-1.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/nlp-taylor-swift-beyonce/index.html"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/nlp-taylor-swift-beyonce/index.html">Natural Language Processing (NLP) and developing a machine learning classifier on Beyonce and Taylor Swift lyrics #TidyTuesday</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/nlp-taylor-swift-beyonce/index.html"></a>
-</div>
+<div class="g-col-1" data-index="11" data-categories="nlp,machine learning,tidymodels,tidytuesday" data-listing-date-sort="1601622000000" data-listing-file-modified-sort="1700602596084" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="869">
+<a href="./posts/nlp-taylor-swift-beyonce/index.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<p class="card-img-top"><img src="posts\nlp-taylor-swift-beyonce\index_files\figure-html\unnamed-chunk-9-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+Natural Language Processing (NLP) and developing a machine learning classifier on Beyonce and Taylor Swift lyrics #TidyTuesday
+</h5>
 <div class="listing-categories">
 <div class="listing-category" onclick="window.quartoListingCategory('nlp'); return false;">
 nlp
@@ -601,20 +582,20 @@ tidymodels
 tidytuesday
 </div>
 </div>
-<div class="listing-description">
-<a href="./posts/nlp-taylor-swift-beyonce/index.html">NLP and building a machine learning clasifier on Beyonce and Taylor Swift Lyrics #TidyTuesday</a>
+<div class="card-text listing-description">
+NLP and building a machine learning clasifier on Beyonce and Taylor Swift Lyrics #TidyTuesday
 </div>
-</div>
-<div class="metadata">
-<a href="./posts/nlp-taylor-swift-beyonce/index.html">
-<div class="listing-date">
-Oct 2, 2020
-</div>
+<div class="card-attribution card-text-small justify">
 <div class="listing-author">
 Michael Luu
 </div>
-</a>
+<div class="listing-date">
+Oct 2, 2020
 </div>
+</div>
+</div>
+</div>
+</a>
 </div>
 </div>
 <div class="listing-no-matching d-none">
