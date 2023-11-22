@@ -19,7 +19,7 @@ library(leaflet)
 
 ```
 
-The following blog post is a very simple visualization using the data from tidytuesday 2023, week 41. This visualization uses the leaflet library to produce a very simple spatial analysis of the 'haunted' locations found in Los Angeles, CA. 
+The following blog post is a very simple visualization using the data from tidytuesday 2023, week 41. This visualization uses the leaflet library to produce a very simple spatial analysis of the 'haunted' locations found in Los Angeles, CA.
 
 We begin by loading the data from the tidytuesdayR package.
 
@@ -37,7 +37,7 @@ Next we take a glimpse of the data to see what we are working with.
 glimpse(data)
 ```
 
-We next subset the data for the observations foudn in Los Angeles, CA. The longitude and latitude are then used to plot the locations on a map using the leaflet library. The 'J.F.K. Library Third' location is removed from the data as it is an outlier and is not located in Los Angeles, CA.
+We next subset the data for the observations found in Los Angeles, CA. The longitude and latitude are then used to plot the locations on a map using the leaflet library. The 'J.F.K. Library Third' location is removed from the data as it is an outlier and is not located in Los Angeles, CA.
 
 ```{r}
 #| column: page
@@ -58,4 +58,3 @@ data |>
   )
 
 ```
-
