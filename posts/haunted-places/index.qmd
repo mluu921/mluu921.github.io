@@ -54,8 +54,7 @@ data |>
   addMarkers(
     lng = ~ longitude,
     lat = ~ latitude,
-    popup = ~ label,
-    clusterOptions = markerClusterOptions()
+    popup = ~ label
   )
 
 ```
