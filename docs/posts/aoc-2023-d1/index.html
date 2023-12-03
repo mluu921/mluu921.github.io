@@ -195,6 +195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<p><img src="https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png" class="img-fluid"></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -284,7 +285,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">cal =</span> <span class="fu">as.numeric</span>(<span class="fu">paste0</span>(first, last))</span>
 <span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  ) </span>
 <span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>res <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">results =</span> <span class="fu">sum</span>(cal))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,000 × 6
+   value                                 value2         digits first last    cal
+   &lt;chr&gt;                                 &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt;
+ 1 9vxfg                                 9vxfg          9      9     9        99
+ 2 19qdlpmdrxone7sevennine               19qdlpmdrx1779 191779 1     9        19
+ 3 1dzntwofour9nineffck                  1dzn2499ffck   12499  1     9        19
+ 4 7bx8hpldgzqjheight                    7bx8hpldgzqjh8 788    7     8        78
+ 5 joneseven2sseven64chvczzn             j172s764chvcz… 172764 1     4        14
+ 6 seven82683                            782683         782683 7     3        73
+ 7 7onefour1eighttwo5three               71418253       71418… 7     3        73
+ 8 8lmsk871eight7                        8lmsk87187     887187 8     7        87
+ 9 ninefivefive2nine5ntvscdfdsmvqgcbxxxt 955295ntvscdf… 955295 9     5        95
+10 onepx6hbgdssfivexs                    1px6hbgdss5xs  165    1     5        15
+# ℹ 990 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>res <span class="sc">|&gt;</span> <span class="fu">summarise</span>(<span class="at">results =</span> <span class="fu">sum</span>(cal))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 1
   results
