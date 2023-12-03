@@ -86,6 +86,8 @@ res <- data |>
     cal = as.numeric(paste0(first, last))
   ) 
 
+res
+
 res |> summarise(results = sum(cal))
 
 ```
