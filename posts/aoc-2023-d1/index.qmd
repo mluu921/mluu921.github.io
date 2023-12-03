@@ -1,0 +1,91 @@
+---
+title: "Advent of Code 2023, Day 1"
+date: '12/2/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: 'https://camo.githubusercontent.com/45e775d95451f2bda211ee757d1a959671cf4c762feb1e7ccaca59925704e333/68747470733a2f2f626c6f67732e7361702e636f6d2f77702d636f6e74656e742f75706c6f6164732f323032302f31312f456b616f5151545845414d4134424e2e6a7067'
+---
+
+```{r}
+library(tidyverse)
+library(here)
+
+```
+
+It's the season for [Advent of Code](https://adventofcode.com/) 2023. Advent of code is an 'advent calendar' of small programming puzzles that begins on 12/1 of every year and last until Christmas 12/25. The following is my solution of Day 1, Part 1 and Part 2 of the 2023 puzzle solved using R.
+
+We begin by loading the puzzle input.
+
+```{r}
+data <- read_lines(
+  here('posts', 'aoc-2023-d1', 'puzzle-input.txt')
+)
+
+data <- as_tibble(data)
+```
+
+# Part 1
+
+The first part of the puzzle is fairly straight forward. We begin by using the `str_remove_all` function from the `stringr` package to remove all of the characters (and leave only the numeric) from the value column. Next we use `str_extract` to extract the first and last digit using regex, and `paste0` to paste the numbers together to get the 'calibration' value. Finally we sum the cal column to get the solution.
+
+```{r}
+res <- data |> 
+  mutate(
+    digits = str_remove_all(value, '[:alpha:]'),
+    first = str_extract(digits, '^[:digit:]'),
+    last = str_extract(digits, '[:digit:]$'),
+    cal = as.numeric(paste0(first, last))
+  ) 
+
+res
+
+res |> 
+  summarise(results = sum(cal))
+```
+
+# Part 2
+
+The second part of the puzzle was extremely tricky. There are a number of special cases where the words are overlapping. My messy solution was to 'fix' those overlapping words such as 'twone' to 'twoone', using the `str_replace_all` function, then using additional `str_replace_all` to convert the words to numeric. Finally we would use a similar solution as above in extracting the first and last digit.
+
+```{r}
+
+convert_char_to_numeric <- \(x) {
+  
+  # special cases with overlapping characters
+  x <- str_replace_all(x, 'twone', 'twoone') |> 
+    str_replace_all('oneight', 'oneeight') |> 
+    str_replace_all('sevenine', 'sevennine') |> 
+    str_replace_all('threeight', 'threeeight') |> 
+    str_replace_all('fiveight', 'fiveeight') |> 
+    str_replace_all('eightwo', 'eighttwo') |> 
+    str_replace_all('eighthree', 'eightthree') |> 
+    str_replace_all('nineight', 'nineeight')
+  
+  x <- str_replace_all(x, 'one', '1') |>
+    str_replace_all('two', '2') |>
+    str_replace_all('three', '3') |>
+    str_replace_all('four', '4') |>
+    str_replace_all('five', '5') |>
+    str_replace_all('six', '6') |>
+    str_replace_all('seven', '7') |>
+    str_replace_all('eight', '8') |>
+    str_replace_all('nine', '9')
+  
+}
+
+res <- data |> 
+  mutate(
+    value2 = convert_char_to_numeric(value),
+    digits = str_remove_all(value2, '[:alpha:]'),
+    first = str_extract(digits, '^[:digit:]'),
+    last = str_extract(digits, '[:digit:]$'),
+    cal = as.numeric(paste0(first, last))
+  ) 
+
+res |> summarise(results = sum(cal))
+
+```
