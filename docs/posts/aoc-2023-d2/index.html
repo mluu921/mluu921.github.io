@@ -195,6 +195,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
+<p><img src="https://camo.githubusercontent.com/45e775d95451f2bda211ee757d1a959671cf4c762feb1e7ccaca59925704e333/68747470733a2f2f626c6f67732e7361702e636f6d2f77702d636f6e74656e742f75706c6f6164732f323032302f31312f456b616f5151545845414d4134424e2e6a7067.png" class="img-fluid"></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -286,7 +287,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="part-2" class="level1">
 <h1>Part 2</h1>
-<p>Again, the solution for Part 2 is quite simple once we have the data in a ‘tidy’ format. The elfs would like to know what is the ‘minimum’ number of cubes that has to be in each bag for each of the games played. The solution is the sum of the ‘power’ (defined as the product of the number of cubes for each color).</p>
+<p>Again, the solution for Part 2 is quite simple once we have the data in a ‘tidy’ format.</p>
+<blockquote class="blockquote">
+<p>For each game, find the minimum set of cubes that must have been present. What is the sum of the power of these sets?</p>
+</blockquote>
+<p>The elfs would like to know what is the ‘minimum’ number of cubes that has to be in each bag for each of the games played. The solution is the sum of the ‘power’ (defined as the product of the number of cubes for each color). We can solve this by taking the maximum number of cubes observed for a given game, then taking the product of the maximum number of cubes for each color.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> </span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(game) <span class="sc">|&gt;</span></span>
