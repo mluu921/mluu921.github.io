@@ -1,0 +1,194 @@
+---
+title: "Advent of Code 2023, Day 3"
+date: '12/4/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+```{r}
+library(tidyverse)
+library(here)
+
+```
+
+Wow what a doozie, the increase in difficulty was significant compared to Day 2. This was a fun one though, I think I could have done it in a more efficient way, but I was happy with the solution I came up with.
+
+# Part 1
+
+Let's start off with the prompt for this puzzle
+
+> What is the sum of all of the part numbers in the engine schematic?
+
+We start off with reading in and preparing the data. I replaced all of the `.` with spaces so that I could use a more simple regex to identify the symbols later.
+
+```{r}
+data <- read_lines(here('posts', 'aoc-2023-d3', 'puzzle-input.txt'))
+
+data <- as_tibble(data)
+
+data <- data |>
+  mutate(row = row_number(),
+         .before = value) |>
+  mutate(value = str_replace_all(value, '\\.', ' '))
+```
+
+We write two helper functions to identify the locations of the symbols and the part numbers. We use the `[:symbol:]` and `[:punct:]` character classes to identify the symbols, and the `[:digit:]` character class to identify the part numbers.
+
+```{r}
+identify_symbols_location <- \(x) {
+  str_locate_all(x, '[:symbol:]|[:punct:]')[[1]] |>
+    as_tibble() |> 
+    select(symbol = start) |> 
+    mutate(
+      symbol_start = symbol - 1,
+      symbol_end = symbol + 1
+    )
+}
+
+identify_parts_location <- \(x) {
+  
+  str_locate_all(x, '[:digit:]+')[[1]] |> 
+    as_tibble() |> 
+    rename(
+      'parts_start' = start,
+      'parts_end' = end
+    )
+  
+}
+
+data <- data |>
+  mutate(
+    symbol_locations = map(value, \(value) identify_symbols_location(value)),
+    part_number_locations = map(value, identify_parts_location),
+    part_number_locations = map2(value, part_number_locations, \(value, part_number_locations) {
+      part_number_locations |>
+        mutate(part_number = str_sub(value, parts_start, parts_end),
+               .before = parts_start)
+    })
+  )
+```
+
+I next construct a dataframe of the grid that we are working with. This is a 140 by 140 grid, and we will use this to identify the locations of the symbols and the values.
+
+```{r}
+grid <- crossing(
+  row = 1:140,
+  column = 1:140
+)
+```
+
+Here are some observations I made regarding the symbols and the values.
+
+row 2, column 28 is a symbol
+
+- row 1, column 27 is a valid spot (above and left of the symbol)
+- row 1, column 28 is a valid spot (above the symbol)
+- row 1, column 29 is a valid spot (above and right of the symbol)
+- row 2, column 27 is a valid spot (left of the symbol)
+- row 2, column 28 is location of the symbol
+- row 2, column 29 is a valid spot (right of the symbol)
+- row 3, column 27 is a valid spot (below and left of the symbol)
+- row 3, column 28 is a valid spot (below the symbol)
+- row 3, column 29 is a valid spot (below and right of the symbol)
+
+The main observations is that the symbol is always in the center of a 3 by 3 grid. We can use this to identify the locations of the symbols. We need to identify all of the adjacent cells that are valid, and then we can use this to identify the locations of the valid parts numbers. Once we get that symbol locations we merge this back into our grid dataframe.
+
+```{r}
+symbol_locations <- data |>
+  select(row, symbol_locations) |>
+  unnest(symbol_locations) |>
+  rowwise() |>
+  mutate(row = list(row + c(-1, 0, 1))) |>
+  unnest(row) |>
+  rowwise() |>
+  mutate(column = list(symbol_start:symbol_end)) |>
+  unnest(column) |>
+  select(row, column) |> 
+  mutate(symbol = 1)
+
+grid <- grid |> 
+  left_join(symbol_locations, by = join_by(row, column)) |> 
+  mutate(symbol = ifelse(is.na(symbol), 0, symbol))
+```
+
+Next I wanted to extract out the values from the puzzle input. I used the same logic as above to identify the locations of the values, and then I merged this back into the grid dataframe.
+
+```{r}
+values <- data |> 
+  select(row, value) |> 
+  mutate(value = str_split(value, '')) |> 
+  unnest(value) |> 
+  group_by(row) |>
+  mutate(column = row_number()) |> 
+  ungroup()
+
+grid <- grid |> 
+  left_join(values, by = join_by(row, column))
+```
+
+Next I extracted out the location of the parts numbers. I used the same logic as above to identify the locations of the parts numbers, and then I merged this back into the grid dataframe.
+
+```{r}
+parts_number <- data |>
+  select(row, part_number_locations) |>
+  unnest(part_number_locations) |>
+  mutate(i = row_number()) |> 
+  rowwise() |>
+  mutate(column = list(parts_start:parts_end)) |> 
+  unnest(column) |> 
+  select(i, row, column, part_number)
+
+grid <- grid |> 
+  left_join(parts_number, by = join_by(row, column)) |> 
+  group_by(row, part_number) |>
+  mutate(
+    valid = ifelse(any(symbol == 1), TRUE, FALSE),
+    valid = ifelse(is.na(part_number), FALSE, valid)
+  ) |> 
+  ungroup()
+```
+
+Now that we have all the locations of the symbols and the values, we can plot the grid. We can see that the symbols are in the center of a 3 by 3 grid (grey). We can also see that any part numbers that fall within the 3 by 3 grid are valid (red).
+
+```{r}
+#| column: page
+#| out-width: 100%
+#| fig-height: 10
+#| fig-width: 10
+
+ggplot(grid, aes(x = column, y = row, fill = factor(symbol))) + 
+  geom_tile() + 
+  coord_equal() +
+  scale_y_reverse() +
+  geom_text(aes(label = value, color = valid), size = 2) +
+  theme_void() + 
+  scale_color_manual(values = c('black', 'red')) +
+  scale_fill_manual(values = c('white', 'grey90')) +
+  theme(
+    legend.position = 'none'
+  )
+```
+
+Now that we have all of the data in a tidy dataframe, we can identify the valid parts numbers, and take the sum of the parts numbers to get the answer.
+
+```{r}
+  
+grid |> 
+  filter(!is.na(part_number)) |>
+  filter(valid == TRUE) |> 
+  select(i, row, part_number) |>
+  distinct() |>
+  summarize(part_number = sum(as.numeric(part_number)))
+
+```
+
+
+
+
