@@ -71,6 +71,7 @@ res
 Once we have the valid games, we can simply sum the game_id columns to get the solution
 
 ```{r}
+#| eval: false
 res |> pull(game_id) |> unique() |> 
   as.numeric() |> sum()
 ```
@@ -92,5 +93,10 @@ res <- data |>
 
 res
 
+
+```
+
+```{r}
+#| eval: false
 res |> summarise(total_power = sum(power))
 ```

@@ -39,7 +39,27 @@ data <- data |>
   mutate(value = str_replace_all(value, '\\.', ' '))
 ```
 
-We write two helper functions to identify the locations of the symbols and the part numbers. We use the `[:symbol:]` and `[:punct:]` character classes to identify the symbols, and the `[:digit:]` character class to identify the part numbers.
+Here are some observations I made regarding the symbols and the values.
+
+row 2, column 28 is a symbol
+
+- row 1, column 27 is a valid spot (above and left of the symbol)
+- row 1, column 28 is a valid spot (above the symbol)
+- row 1, column 29 is a valid spot (above and right of the symbol)
+- row 2, column 27 is a valid spot (left of the symbol)
+- row 2, column 28 is location of the symbol
+- row 2, column 29 is a valid spot (right of the symbol)
+- row 3, column 27 is a valid spot (below and left of the symbol)
+- row 3, column 28 is a valid spot (below the symbol)
+- row 3, column 29 is a valid spot (below and right of the symbol)
+
+The main observations is that the symbol is always in the center of a 3 by 3 grid. We can use this to identify the locations of the symbols. We need to identify all of the adjacent cells that are valid, and then we can use this to identify the locations of the valid parts numbers. 
+
+```{r}
+data
+```
+
+We write two helper functions to identify the locations of the symbols and the part numbers. We use the `[:symbol:]` and `[:punct:]` character classes to identify the symbols, and the `[:digit:]` character class to identify the part numbers. For the symbols location, I also tabulated the 'start', and 'end' of the locations adjacent to the symbol in the helper function.
 
 ```{r}
 identify_symbols_location <- \(x) {
@@ -75,7 +95,7 @@ data <- data |>
   )
 ```
 
-I next construct a dataframe of the grid that we are working with. This is a 140 by 140 grid, and we will use this to identify the locations of the symbols and the values.
+I next construct a tibble of the grid that we are working with. This is a 140 by 140 grid, and we will use this as a template to merge the locations of the symbols, parts number, and the values into.
 
 ```{r}
 grid <- crossing(
@@ -84,21 +104,7 @@ grid <- crossing(
 )
 ```
 
-Here are some observations I made regarding the symbols and the values.
-
-row 2, column 28 is a symbol
-
-- row 1, column 27 is a valid spot (above and left of the symbol)
-- row 1, column 28 is a valid spot (above the symbol)
-- row 1, column 29 is a valid spot (above and right of the symbol)
-- row 2, column 27 is a valid spot (left of the symbol)
-- row 2, column 28 is location of the symbol
-- row 2, column 29 is a valid spot (right of the symbol)
-- row 3, column 27 is a valid spot (below and left of the symbol)
-- row 3, column 28 is a valid spot (below the symbol)
-- row 3, column 29 is a valid spot (below and right of the symbol)
-
-The main observations is that the symbol is always in the center of a 3 by 3 grid. We can use this to identify the locations of the symbols. We need to identify all of the adjacent cells that are valid, and then we can use this to identify the locations of the valid parts numbers. Once we get that symbol locations we merge this back into our grid dataframe.
+Once we get the symbol locations we merge this back into our grid. The trick to this part is to identify the adjacent cells to the symbol, and then merge this back into the grid. I did this by first unnesting the symbol locations, and then I created a list of the adjacent cells to the symbol. I then unnested this list, and then merged this back into the grid. I then filled in the symbol column with a 1 if the cell was a symbol, and a 0 if it was not.
 
 ```{r}
 symbol_locations <- data |>
@@ -118,7 +124,7 @@ grid <- grid |>
   mutate(symbol = ifelse(is.na(symbol), 0, symbol))
 ```
 
-Next I wanted to extract out the values from the puzzle input. I used the same logic as above to identify the locations of the values, and then I merged this back into the grid dataframe.
+Next I wanted to extract out the values from the puzzle input. I split the values into individual characters, and then I merged this back into the grid.
 
 ```{r}
 values <- data |> 
@@ -133,7 +139,7 @@ grid <- grid |>
   left_join(values, by = join_by(row, column))
 ```
 
-Next I extracted out the location of the parts numbers. I used the same logic as above to identify the locations of the parts numbers, and then I merged this back into the grid dataframe.
+Next I extracted out the location of the parts numbers, then again merged this back into the grid. I further checked to see if the parts numbers are 'valid' or adjacent to a symbol. I did this by checking whether the parts number falls on any of the symbol adjacent cells `symbol = 1`.
 
 ```{r}
 parts_number <- data |>
@@ -155,7 +161,7 @@ grid <- grid |>
   ungroup()
 ```
 
-Now that we have all the locations of the symbols and the values, we can plot the grid. We can see that the symbols are in the center of a 3 by 3 grid (grey). We can also see that any part numbers that fall within the 3 by 3 grid are valid (red).
+Now that we have all the locations of the symbols, parts numbers, and the values, we can plot the grid. We can see that the symbols are in the center of a 3 by 3 grid (grey). We can also see that any part numbers that fall within the 3 by 3 grid are valid (red).
 
 ```{r}
 #| column: page
@@ -179,7 +185,8 @@ ggplot(grid, aes(x = column, y = row, fill = factor(symbol))) +
 Now that we have all of the data in a tidy dataframe, we can identify the valid parts numbers, and take the sum of the parts numbers to get the answer.
 
 ```{r}
-  
+#| eval: false
+
 grid |> 
   filter(!is.na(part_number)) |>
   filter(valid == TRUE) |> 

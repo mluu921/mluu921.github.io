@@ -90,6 +90,12 @@ res <- data |>
 
 res
 
+
+```
+
+```{r}
+#| eval: false
 res |> summarise(results = sum(cal))
 
 ```
+
