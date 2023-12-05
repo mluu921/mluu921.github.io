@@ -1,0 +1,153 @@
+---
+title: "Advent of Code 2023, Day 4"
+date: '12/5/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+# Part 1
+
+```{r}
+library(tidyverse)
+library(here)
+
+```
+
+The complexity of this puzzle dropped a bit for Day 4. Definitely wasn't as difficulty as Day 3.
+
+Let's again take a look at the prompt for the puzzle
+
+> Take a seat in the large pile of colorful cards. How many points are they worth in total?
+
+The idea is that we have a whole bunch of scratch cards, with a set of winning numbers and your set of numbers. We need to identify the total number of matches for each card, and then calculate the points for each card.
+
+We calculate the points by using the following formula.
+
+- If there are no matches then the card is worth 0 points
+- If there are 1 match then the card is worth 1 point
+- If there are more than 1 match, then the card is worth 2 times the number of matches
+
+Let's first read in the data
+
+```{r}
+data <- read_lines(
+  here('posts', 'aoc-2023-d4', 'puzzle-input.txt')
+)
+
+data <- as_tibble(data)
+
+data
+
+```
+
+Now that the data is read in, let's tidy the data up a bit. We'll use the `separate` function to split the data into the card and the value. We'll then use `str_extract` to extract the card number from the card string. We'll then use `separate` again to split the value into the winning numbers and the elf's numbers. We'll then use `str_split` to split the winning numbers and elf's numbers into a list of numbers. We'll then use `as.numeric` to convert the numbers from strings to numbers. We'll then use `na.omit` to remove any `NA` values from the list of numbers.
+
+```{r}
+data <- data |>
+  separate(value, c('card', 'value'), sep = ': ') |>
+  mutate(card = str_extract(card, '\\d+') |> as.numeric()) |>
+  separate(value, c('winning_numbers', 'elfs_numbers'), sep = ' \\| ') |>
+  mutate(winning_numbers = str_split(winning_numbers, ' ') |>
+           map(\(x) as.numeric(x)),) |>
+  mutate(winning_numbers = map(winning_numbers, \(x) na.omit(x)))
+
+data <- data |> 
+  mutate(
+    elfs_numbers = str_split(elfs_numbers, ' '),
+    elfs_numbers = map(elfs_numbers, \(x) as.numeric(x) |> na.omit())
+  )
+
+data
+```
+
+Now that the data is tidied up, let's calculate the number of matches for each card. We'll use the `intersect` function to calculate the number of matches. We'll then use `length` to calculate the number of matches. We'll then use `map_int` to calculate the points for each card, based on the above rule.
+
+```{r}
+
+calculate_matches <- \(winning_numbers, elfs_numbers) {
+  intersect(elfs_numbers, winning_numbers) |>
+    length()
+  
+}
+
+data <- data |> 
+  rowwise() |> 
+  mutate(
+    matches = calculate_matches(winning_numbers, elfs_numbers)
+  ) |> 
+  ungroup()
+
+data <- data |>
+  mutate(points = map_int(matches, \(matches) {
+    if (matches == 0) {
+      points <- 0
+    } else if (matches == 1) {
+      points <- 1
+    } else if (matches > 1) {
+      points <- 2 ^ (matches - 1)
+    }
+    
+    return(points)
+  }))
+
+data
+
+```
+
+Finally we just add up the points, and we have the answer
+
+```{r}
+#| eval: false
+sum(data$points)
+```
+
+```{r}
+#| eval: false
+#| echo: false
+data <- data |> 
+  select(card, matches)
+
+data <- data |> 
+  mutate(
+    i = row_number(),
+    .before = card
+  )
+
+pmap(data, \(i, card, matches) {
+  
+  total_rows <- nrow(data)
+  
+  start <- card + 1
+  end <- start + matches - 1
+  
+  if (end > total_rows) {
+    end <- total_rows
+  }
+  
+  data |>
+    slice(start:end)
+  
+})
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
