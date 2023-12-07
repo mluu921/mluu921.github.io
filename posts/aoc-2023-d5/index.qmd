@@ -1,0 +1,149 @@
+---
+title: "Advent of Code 2023, Day 5"
+date: '12/6/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+Let's just say this puzzle made my processor go BRRRRRRRRRRRRR. 
+
+> What is the lowest location number that corresponds to any of the initial seed numbers?
+
+The idea of this puzzle is that they provided specific instructions in the puzzle input that allows us to construct the conversion tables need to convert from seed to location. The conversion tables are used to convert the seed numbers to soil, then soil to fertilizer, then fertilizer to water, then water to light, then light to temp, then temp to humidity, then finally humidity to location. 
+
+I don't have the most efficient method of doing this, but it works. The strategy of this puzzle isn't very difficulty, however the sheer amount of data that needs to be processed is what makes this puzzle difficult. Each conversion table that being generated are in the hundreds of millions of rows, and there are 7 conversion tables that need to be generated for us to convert from seed to location. My strategy was to use the arrow package, which allows for out of memory processing of big data.
+
+# Part 1
+
+```{r}
+library(tidyverse)
+library(here)
+library(arrow)
+
+```
+
+We first read in the puzzle prompt, and extract out the specific instructions for each conversion table into its own data frame. We create two helper functions that helps us process the data. The first function `generate_map_conversion_data`, takes in the conversion table data, and the title of the conversion table, and returns a list of arrow tables that contains the conversion table data. The second function takes in a list of arrow tables, and the source numbers, and returns the destination numbers.
+
+```{r}
+data <- read_lines(
+  here('posts', 'aoc-2023-d5', 'puzzle-input.txt')
+)
+
+seeds <- data[1] |> 
+  str_remove('seeds: ') |> 
+  str_split(pattern = ' ') |> 
+  unlist() |> 
+  as.numeric()
+
+seed_to_soil_map <- data[4:50]
+soil_to_fertilizer_map <- data[53:70]
+fertilizer_to_water_map <- data[73:84]
+water_to_light_map <- data[87:135]
+light_to_temp_map <- data[138:167]
+temp_to_humidity_map <- data[170:192]
+humidity_to_location_map <- data[195:237]
+
+generate_map_conversion_data <- \(map_data, title) {
+  map_data <- as_tibble(map_data) |>
+    separate(value, c('destination', 'origin', 'range'), sep = ' ') |>
+    mutate(across(everything(), \(x) as.numeric(x)))
+  
+  
+  table <- pmap(map_data, \(destination, origin, range) {
+    arrow_table(
+      origin = seq(origin, origin + range - 1, by = 1),
+      destination = seq(destination, destination + range - 1, by = 1)
+    )
+    
+  }, .progress = glue::glue('Constructing Conversion Table for {title}:'))
+  
+  table <- concat_tables(!!!table)
+  
+}
+
+extract_map_conversion_data <-
+  \(map_data, origin_values, title) {
+
+    map_data <- generate_map_conversion_data(map_data, title)
+    
+    map_data <- map_data |>
+      filter(origin %in% origin_values) |>
+      collect()
+    
+    origin <- map_data |> pull(origin)
+    
+    missing <- setdiff(origin_values, origin)
+    
+    if (length(missing) > 0) {
+      map_data <- tibble(origin = missing,
+                         destination = missing) |>
+        bind_rows(map_data)
+    }
+    
+    map_data
+  }
+
+```
+
+Here we generate a tibble that contains the conversion table data, and the title of the conversion table. 
+
+```{r}
+
+parameters <- tibble(
+  title = c(
+    'Seed to Soil',
+    'Soil to Fertilizer',
+    'Fertilizer to Water',
+    'Water to Light',
+    'Light to Temp',
+    'Temp to Humidity',
+    'Humidity to Location'
+  ),
+  data = list(
+    seed_to_soil_map,
+    soil_to_fertilizer_map,
+    fertilizer_to_water_map,
+    water_to_light_map,
+    light_to_temp_map,
+    temp_to_humidity_map,
+    humidity_to_location_map
+  )
+)
+
+parameters
+```
+
+We then use the `pwalk` function to iterate through the list of conversion tables, and extract the destination numbers from the conversion tables. We then use the `pull` function to extract the destination numbers from the arrow table, and assign it to the `origin` variable. This iterates through the list of conversion tables, and extracts the destination numbers from each conversion table, from seed to eventually location.
+
+```{r}
+#| eval: false
+origin <- seeds
+pwalk(parameters, \(title, data) {
+  
+  out <- extract_map_conversion_data(
+    data, origin, title
+  )
+  
+  origin <<- out |> pull(destination)
+  
+  return(out)
+  
+}, .progress = 'Extracting Destination Data:')
+
+```
+
+We then use the `min` function to find the lowest location number that corresponds to any of the initial seed numbers.
+
+```{r}
+#| eval: false
+origin |> min()
+```
+
+

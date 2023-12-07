@@ -1,0 +1,143 @@
+---
+title: "Advent of Code 2023, Day 6"
+date: '12/7/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+```{r}
+library(tidyverse)
+library(here)
+
+```
+
+What is going on with these puzzles?! Difficulty dropped quite a bit again for the even day puzzles.
+
+# Part 1
+
+Let's recap on the puzzle prompt.
+
+> Determine the number of ways you could beat the record in each race. What do you get if you multiply these numbers together?
+
+Let's first start off with reading in the puzzle input and tidy the data.
+
+```{r}
+
+data <- read_lines(
+  here('posts', 'aoc-2023-d6', 'puzzle-input.txt')
+)
+
+data <- data |>
+  as_tibble() |>
+  separate(value, c('type', 'value'), sep = ': ') |>
+  mutate(
+    value = str_trim(value),
+    value = str_split(value, ' '),
+    value = map(value, \(x) as.numeric(x) |> na.omit())
+  ) |>
+  unnest(value) |>
+  mutate(race = rep(1:4, 2)) |>
+  pivot_wider(names_from = type, values_from = value)
+
+data <- data |> janitor::clean_names()
+
+data
+
+```
+
+The idea of this puzzle is that we have 4 toy boat races that we need to figure out the number of ways that we can beat the record for the boat races. For each toy boat, we can hold the button down to make the boat go faster. The speed is directly correlated with the amount of time the button is held e.g. 1 milisecond = 1 milimeter/milisecond, 2 milisecond = 2 milimeter/milisecond, etc. However for each milisecond we hold the button down, the time will go against the amount of time alotted to travel the distance. If we hold the button down for too long, then we won't have time to travel. If we hold the button down for too short, then the boat won't have any speed to travel the necessary distance to beat the record.
+
+Let's create a function that allows us to tabulate the button hold, dependent on the total time and the amount of time the button was held.
+
+```{r}
+calculate_total_distance <- \(total_time, button_hold) {
+  speed <- button_hold
+  
+  time_remaining <- total_time - button_hold
+  total_distance <- speed * time_remaining
+  
+  total_distance
+  
+}
+
+```
+
+Let's create a tibble with all possible amount of time  to hold the button from 0 milisecond to the total time for each race. Now let's tabulate the total distance traveled for all possible time the button was held. Finally let's identify the rows, where the total distance traveled from our toy boat exceeeded the distance traveled for the record. We can then count the total rows for each record, and determine the product for the answer.
+
+
+```{r}
+
+res <- pmap(data, \(race, time, distance) {
+  temp <- tibble(total_time = time,
+                 button_hold = 0:time,
+                 distance)
+  
+  temp |>
+    mutate(total_distance = calculate_total_distance(total_time, button_hold)) |> 
+    filter(total_distance > distance) |> 
+    nrow()
+  
+})
+
+res
+```
+
+```{r}
+#| eval: false
+res |> unlist() |> prod()
+```
+
+first attempt: 140220
+
+# Part 2
+
+> How many ways can you beat the record in this one much longer race?
+
+The strategy for part 2 is identical for part 1, however now we have 1 single race instead of 4 races. We then calculate the total number of ways we can beat the record in this much longe race
+
+```{r}
+
+data <- read_lines(here('posts', 'aoc-2023-d6', 'puzzle-input.txt'))
+
+data <- data |>
+  as_tibble() |>
+  separate(value, c('type', 'value'), sep = ': ') |>
+  mutate(
+    value = str_trim(value, side = 'both'),
+    value = str_remove_all(value, ' '),
+    value = as.numeric(value)
+  ) |>
+  pivot_wider(names_from = type, values_from = value) |>
+  janitor::clean_names()
+
+data
+  
+```
+
+```{r}
+res <- tibble(
+  total_time = data$time,
+  button_hold = 0:data$time,
+  distance = data$distance
+)
+
+res
+
+```
+
+```{r}
+#| eval: false
+res |>
+  mutate(total_distance = calculate_total_distance(total_time, button_hold)) |>
+  filter(total_distance > distance) |> 
+  nrow()
+```
+
+
