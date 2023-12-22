@@ -1,0 +1,15 @@
+{
+  "hash": "b17c1933902433e4dd209442402a6a56",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Advent of Code 2023, Day 9\"\ndate: '12/10/2023'\nwarning: false\nmessage: false\ncategories:\n  - advent of code\neditor_options: \n  chunk_output_type: console\nimage: \"https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png\"\n---\n\n\n![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nlibrary(here)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\ndata <- read_lines(\n  here('posts', 'aoc-2023-d9', 'puzzle-input.txt')\n)\n\ngenerate_new_columns <- \\(data, new_column, prev_column) {\n  prev_column <- rlang::parse_expr(prev_column)\n  new_column <- rlang::parse_expr(new_column)\n  \n  temp <- data |>\n    mutate(!!new_column := !!prev_column - lag(!!prev_column)) |>\n    select(!!new_column)\n  \n  bind_cols(data, temp)\n  \n}\n\npredicted_next_history <- \\(history) {\n  history <- history |>\n    str_split(' ')  |>\n    unlist() |>\n    as_tibble() |>\n    mutate(value = as.numeric(value)) |>\n    rename('c0' = value)\n  \n  \n  all_zeroes <- FALSE\n  i <- 0\n  temp <- history\n  prev <- NULL\n  while (all_zeroes == FALSE) {\n    new <- paste0('c', i + 1)\n    prev <- paste0('c', i)\n    \n    temp <- generate_new_columns(temp, new, prev)\n    new_column <- temp |> pull(!!new) |> na.omit()\n    all_zeroes <- all(new_column == 0)\n    \n    i <- i + 1\n    \n  }\n  \n  values <- map(temp, \\(x) {\n    vals <- x |> na.omit()\n    \n    total_vals <- length(vals)\n    \n    return(vals[total_vals])\n    \n  })\n  \n\n  values |> unlist() |> sum()\n\n}\n\nresults <-\n  map(data, \\(x) predicted_next_history(x), .progress = 'Predicting Next History:')\n\nresults |> unlist() |> sum()\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 1772145754\n```\n\n\n:::\n:::\n\n\n- 1391575708 (too low)\n- 1772145754 [correct]\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

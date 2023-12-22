@@ -1,0 +1,15 @@
+{
+  "hash": "51c934637916e71b9cf47fbfe4fb0e4c",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Advent of Code 2023, Day 10\"\ndate: '12/11/2023'\nwarning: false\nmessage: false\ncategories:\n  - advent of code\neditor_options: \n  chunk_output_type: console\nimage: \"https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png\"\n---\n\n\n![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)\n\n\n::: {.cell}\n\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "hash": "69144af1d4362c9d6314e3640ecca6c2",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Advent of Code 2023, Day 8\"\ndate: '12/9/2023'\nwarning: false\nmessage: false\ncategories:\n  - advent of code\neditor_options: \n  chunk_output_type: console\nimage: \"https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png\"\n---\n\n\n![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nlibrary(here)\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\ndata <- read_lines(\n  here('posts', 'aoc-2023-d8', 'puzzle-input.txt')\n)\n\ninstructions <- data[[1]]\ninstructions <- instructions |> str_split('') \ninstructions <- instructions[[1]]\n\ndata <- data[2:776] |> \n  as_tibble() |> \n  filter(value != '') |> \n  separate(value, into = c('id', 'direction'), sep = ' = ') |> \n  separate(direction, into = c('L', 'R'), sep = ', ') |> \n  mutate(L = str_remove(L, '\\\\(')) |> \n  mutate(R = str_remove(R, '\\\\)')) |> \n  arrange(id)\n\ndata <- data |> \n  pivot_longer(cols = c('L', 'R'), names_to = 'direction', values_to = 'value')\n\ntrace_id_direction <- \\(data, start_id, dir) {\n  data |>\n    filter(id == start_id) |>\n    filter(direction == dir) |>\n    pull(value)\n  \n}\n```\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\ni <- 1\nposition_id <- 'AAA'\nresults <- c()\nwhile (position_id != 'ZZZ') {\n  res <- map(instructions, \\(x) {\n    position_id <<- trace_id_direction(data, position_id, x)\n    \n    cat('position_id: ', position_id, ', iteration: ', i, '\\n')\n    i <<- i + 1\n  }) |> unlist()\n  \n  results <- c(results, res)\n  \n}\n```\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,297 @@
+---
+title: "Advent of Code 2023, Day 7"
+date: '12/8/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+Time for some Camel Cards (Poker)! This was a fun puzzle, that really made me think outside of the box.
+
+# Part 1
+
+We are given a hand and a set of rules on how to rank the hand. The rules are as follows:
+
+> In Camel Cards, you get a list of hands, and your goal is to order them based on the strength of each hand. A hand consists of five cards labeled one of A, K, Q, J, T, 9, 8, 7, 6, 5, 4, 3, or 2. The relative strength of each card follows this order, where A is the highest and 2 is the lowest. The strength of a hand is determined by the highest ranked card in the hand, with ties broken by the second highest ranked card, and so on. 
+
+Let's start off by reading in the data and separating the hand and bid into separate columns.
+
+```{r}
+library(tidyverse)
+library(here)
+
+```
+
+```{r}
+data <- read_lines(
+  here('posts', 'aoc-2023-d7', 'puzzle-input.txt')
+)
+
+data <- data |> 
+  as_tibble() |> 
+  separate(value, into = c('hand', 'bid'), sep = ' ')
+
+```
+
+Now let's recap on the prompt of the puzzle.
+
+> Find the rank of every hand in your set. What are the total winnings?
+
+I wrote a simple function, `check_hand_type` to identify the type of hand that we are given. The function works by taking a count of the number of unique values in the hand, then assigning the type of either, 'ONE PAIR', 'TWO PAIR', 'THREE OF A KIND', 'FULL HOUSE', 'FOUR OF A KIND', or 'STRAIGHT'. If the hand is not one of these types, then it is a 'HIGH CARD'.
+
+```{r}
+
+check_hand_type <- \(x) {
+  values <- str_split(x, '') |> unlist()
+  
+  counts <- values |> as_tibble() |> count(value)
+  
+  counts <- counts |> pull(n)
+  
+  if (length(counts) == 4) {
+    if (all(sort(counts) == c(1, 1, 1, 2))) {
+      type <- 'ONE PAIR'
+    }
+    
+  }
+  
+  if (length(counts) == 3) {
+    if (all(sort(counts) == c(1, 2, 2))) {
+      type <- 'TWO PAIR'
+    }
+    
+    if (all(sort(counts) == c(1, 1, 3))) {
+      type <- 'THREE OF A KIND'
+    }
+    
+  }
+  
+  if (length(counts) == 2) {
+    
+    if (all(sort(counts) == c(2, 3))) {
+      type <- 'FULL HOUSE'
+    }
+    
+    if (all(sort(counts) == c(1, 4))) {
+      type <- 'FOUR OF A KIND'
+    }
+    
+  }
+  
+  if (length(counts) == 1) {
+    type <- 'FIVE OF A KIND'
+  }
+  
+  if (length(counts) == 5) {
+    type <- 'HIGH CARD'
+  }
+  
+  type
+  
+}
+
+
+
+```
+
+Next, let's apply this function to every hand in our data. Then we will convert the type to a factor, and order the levels in the correct order of increasing strength.
+
+```{r}
+data <- data |> 
+  rowwise() |> 
+  mutate(
+    type = check_hand_type(hand)
+  ) |> 
+  ungroup()
+
+data <- data |> 
+  mutate(
+    type = factor(
+      type,
+      levels = c(
+        'HIGH CARD',
+        'ONE PAIR',
+        'TWO PAIR',
+        'THREE OF A KIND',
+        'FULL HOUSE',
+        'FOUR OF A KIND',
+        'FIVE OF A KIND'
+      ),
+      ordered = TRUE
+    )
+  )
+```
+
+Now that we have the type of each hand, we can apply the first level of ranking by the the type. Next within each type, we will further rank the hands by the highest card, then the second highest card, and so on. We will do this by splitting the hand into separate columns, then using `arrange` on each of the columns.
+
+```{r}
+weights <- rev(c('A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'))
+
+data <- data |>
+  group_nest(type) |>
+  mutate(data = map(data, \(data) {
+    data <- data |>
+      mutate(splits = str_split(hand, '')) |>
+      rowwise() |>
+      mutate(
+        card1 = splits[[1]],
+        card2 = splits[[2]],
+        card3 = splits[[3]],
+        card4 = splits[[4]],
+        card5 = splits[[5]]
+      ) |>
+      ungroup() |>
+      arrange(card1)
+    
+    data <- data |>
+      mutate(across(contains('card'), \(x) {
+        factor(x, levels = weights, ordered = TRUE)
+      }))
+    
+    data |>
+      arrange(card1,
+              card2,
+              card3,
+              card4,
+              card5) |> 
+      select(-splits)
+    
+  })) 
+
+```
+
+Once we have the ranking of the hands, we can calculate the total winnings by multiplying the rank by the bid. Then we can sum the total winnings to get the answer to the puzzle.
+
+```{r}
+data <- data |> 
+  unnest(data) |> 
+  mutate(
+    rank = row_number(),
+    .before = type
+  ) |> 
+  mutate(
+    total_winnings = rank * as.numeric(bid)
+  )
+
+```
+
+```{r}
+#| eval: false
+sum(data$total_winnings)
+```
+
+# Part 2
+
+The second part of the puzzle asks us to consider the following:
+
+> To make things a little more interesting, the Elf introduces one additional rule. Now, J cards are jokers - wildcards that can act like whatever card would make the hand the strongest type possible.
+
+With the prompt as follows: 
+
+> Using the new joker rule, find the rank of every hand in your set. What are the new total winnings?
+
+Overall the second part of the puzzle is very similar to the first part. The only difference is that we need to consider the jokers in our ranking. To do this, we will add a new column to our data, `jokers`, which will tally the number of jokers in each hand. Then we will create a new column, `new_type`, which will be the type of the hand with the jokers considered. We will do this by using `case_when` to assign the new type based on the original type and the number of jokers.
+
+```{r}
+
+data <- data |>
+  mutate(jokers = str_count(hand, 'J')) |>
+  mutate(
+    new_type = case_when(
+      type == 'FOUR OF A KIND' & jokers == 1 ~ 'FIVE OF A KIND',
+      type == 'HIGH CARD' & jokers == 1 ~ 'ONE PAIR',
+      type == 'ONE PAIR' & jokers == 1 ~ 'THREE OF A KIND',
+      type == 'ONE PAIR' & jokers == 2 ~ 'THREE OF A KIND',
+      type == 'TWO PAIR' & jokers == 1 ~ 'FULL HOUSE',
+      type == 'TWO PAIR' & jokers == 2 ~ 'FOUR OF A KIND',
+      type == 'THREE OF A KIND' & jokers == 1 ~ 'FOUR OF A KIND',
+      type == 'FULL HOUSE' & jokers == 2 ~ 'FIVE OF A KIND',
+      type == 'FULL HOUSE' & jokers == 3 ~ 'FIVE OF A KIND',
+      type == 'FOUR OF A KIND' & jokers == 4 ~ 'FIVE OF A KIND',
+      type == 'FIVE OF A KIND' & jokers == 5 ~ 'FIVE OF A KIND',
+      jokers == 0 ~ type
+    )
+  )
+
+data <- data |> 
+  mutate(
+    new_type = factor(
+      new_type,
+      levels = c(
+        'HIGH CARD',
+        'ONE PAIR',
+        'TWO PAIR',
+        'THREE OF A KIND',
+        'FULL HOUSE',
+        'FOUR OF A KIND',
+        'FIVE OF A KIND'
+      ),
+      ordered = TRUE
+    )
+  )
+
+```
+
+Now that we have the new type of each hand, we can apply the first level of ranking by the the type. We will modify the previous code in which we will now rank the `J` as the weakest card. The rest is identical to Part 1 to tally the total winnings.
+
+```{r}
+weights <- rev(c('A', 'K', 'Q', 'T', '9', '8', '7', '6', '5', '4', '3', '2', 'J'))
+
+data <- data |>
+  group_nest(new_type) |>
+  mutate(data = map(data, \(data) {
+    data <- data |>
+      mutate(splits = str_split(hand, '')) |>
+      rowwise() |>
+      mutate(
+        card1 = splits[[1]],
+        card2 = splits[[2]],
+        card3 = splits[[3]],
+        card4 = splits[[4]],
+        card5 = splits[[5]]
+      ) |>
+      ungroup() |>
+      arrange(card1)
+    
+    data <- data |>
+      mutate(across(contains('card'), \(x) {
+        factor(x, levels = weights, ordered = TRUE)
+      }))
+    
+    data |>
+      arrange(card1,
+              card2,
+              card3,
+              card4,
+              card5) |> 
+      select(-splits)
+    
+  })) 
+
+data <- data |> 
+  unnest(data) |> 
+  mutate(
+    rank = row_number(),
+    .before = type
+  ) |> 
+  mutate(
+    total_winnings = rank * as.numeric(bid)
+  )
+
+```
+
+```{r}
+#| eval: false
+
+sum(data$total_winnings)
+```
+
+
+
+
