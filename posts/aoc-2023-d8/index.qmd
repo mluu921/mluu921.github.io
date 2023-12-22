@@ -1,0 +1,106 @@
+---
+title: "Advent of Code 2023, Day 8"
+date: '12/9/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+# Part 1
+
+This was definitely a fun puzzle. As always, lets start off with reading in the puzzle input, and tidy it up into something we can work with.
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+There's two parts to the input, the first part is the instructions, and the second part are the nodes that can be traversed. 
+
+```{r}
+data <- read_lines(
+  here('posts', 'aoc-2023-d8', 'puzzle-input.txt')
+)
+
+instructions <- data[[1]]
+instructions <- instructions |> str_split('') 
+instructions <- instructions[[1]]
+
+data <- data[2:776] |> 
+  as_tibble() |> 
+  filter(value != '') |> 
+  separate(value, into = c('id', 'direction'), sep = ' = ') |> 
+  separate(direction, into = c('L', 'R'), sep = ', ') |> 
+  mutate(L = str_remove(L, '\\(')) |> 
+  mutate(R = str_remove(R, '\\)')) |> 
+  arrange(id)
+
+data <- data |> 
+  pivot_longer(cols = c('L', 'R'), names_to = 'direction', values_to = 'value')
+
+```
+
+Now that we have the data into something we can work with let's recap on the instructions. These are the set of instructions that needs to be traversed, e.g. the L or the R node in the data.
+
+The following are a vector of instructions on whether to choose the L or the R for each of the nodes.
+
+```{r}
+instructions
+```
+
+Let's also have a look at the nodes that can be traversed. 
+
+```{r}
+data
+```
+
+The prompt of the puzzle is as follows.
+
+> Starting at AAA, follow the left/right instructions. How many steps are required to reach ZZZ?
+
+We start off with writing a simple function that traces the path of the instructions. e.g. identify the node, and extract the value of the node.
+
+```{r}
+trace_id_direction <- \(data, start_id, dir) {
+  data |>
+    filter(id == start_id) |>
+    filter(direction == dir) |>
+    pull(value)
+  
+}
+
+```
+
+Now we write a simple while loop to traverse the instructions. We start off at the node AAA, and then we trace the path of the instructions. We then update the node to the new node, and repeat the process until we reach the node ZZZ. The total number of iterations is the solution to the puzzle
+
+```{r}
+#| eval: false
+
+i <- 1
+position_id <- 'AAA'
+results <- c()
+while (position_id != 'ZZZ') {
+  res <- map(instructions, \(x) {
+    position_id <<- trace_id_direction(data, position_id, x)
+    
+    cat('position_id: ', position_id, ', iteration: ', i, '\n')
+    i <<- i + 1
+    
+    return(position_id)
+  }) |> unlist()
+  
+  results <- c(results, res)
+  
+}
+
+```
+
+
+
+
