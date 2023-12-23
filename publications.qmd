@@ -20,13 +20,13 @@ q <- '(Michael Luu) AND (Cedars-Sinai[Affiliation])'
 
 last_refreshed <- fs::file_info('publications.bib') |> pull(modification_time) |> date()
 
-# if(last_refreshed < Sys.Date()) {
-  # 
-  # data <- RefManageR::ReadPubMed(q, retmax = 999)
-  # 
-  # RefManageR::WriteBib(data, file = 'publications.bib')
-  # 
-# }
+if(last_refreshed < Sys.Date()) {
+
+data <- RefManageR::ReadPubMed(q, retmax = 999)
+
+RefManageR::WriteBib(data, file = 'publications.bib')
+
+}
 
 data <- RefManageR::ReadBib('publications.bib')
 
