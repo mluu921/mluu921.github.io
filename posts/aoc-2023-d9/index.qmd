@@ -1,0 +1,189 @@
+---
+title: "Advent of Code 2023, Day 9"
+date: '12/10/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+# Part 1
+
+Part 1 of this puzzle is fairly straight forward. The goal of Part 1 is to identify the next number in the 'history'. In order to identify the next value in the history, we need to identify the difference between the values, until the differences in the values is 0. We would then sum the last value of all the differences in order to obtain the next value in the history.
+
+The puzzle prompt is as follows: 
+
+> Analyze your OASIS report and extrapolate the next value for each history. What is the sum of these extrapolated values?
+
+We would then take the sum of the predicted next history among all of the histories.
+
+Let's start off with reading in the puzzle input.
+
+```{r}
+data <- read_lines(
+  here('posts', 'aoc-2023-d9', 'puzzle-input.txt')
+)
+
+data |> head()
+
+```
+
+Now let's clean up the data a bit, we'll start by splitting the history by spaces and converting the history into a column of a tibble.
+
+```{r}
+data <- map(data, \(x) {
+  x |>
+    str_split(' ')  |>
+    unlist() |>
+    as_tibble() |>
+    mutate(value = as.numeric(value)) |>
+    rename('c0' = value)
+  
+})
+
+data |> head()
+```
+
+I'm going to create two helper functions to facilitate this puzzle, first it's `generate_new_columns`. This function will create new columns with the differences based on the previous column. The second function `predicted_next_history` will continue to calculate the differences in new columns until all the values are zero.
+
+```{r}
+generate_new_columns <- \(data, new_column, prev_column) {
+  prev_column <- rlang::parse_expr(prev_column)
+  new_column <- rlang::parse_expr(new_column)
+  
+  temp <- data |>
+    mutate(!!new_column := !!prev_column - lag(!!prev_column)) |>
+    select(!!new_column)
+  
+  bind_cols(data, temp)
+  
+}
+
+predicted_next_history <- \(history) {
+
+  all_zeroes <- FALSE
+  i <- 0
+  temp <- history
+  prev <- NULL
+  
+  while (all_zeroes == FALSE) {
+    new <- paste0('c', i + 1)
+    prev <- paste0('c', i)
+    
+    temp <- generate_new_columns(temp, new, prev)
+    new_column <- temp |> pull(!!new) |> na.omit()
+    all_zeroes <- all(new_column == 0)
+    
+    i <- i + 1
+    
+  }
+  
+  values <- map(temp, \(x) {
+    vals <- x |> na.omit()
+    
+    total_vals <- length(vals)
+    
+    return(vals[total_vals])
+    
+  })
+  
+
+  values |> unlist() |> sum()
+
+}
+
+```
+
+Now we can apply these helper functions to all of the histories.
+
+```{r}
+results <-
+  map(data, \(x) predicted_next_history(x), .progress = 'Predicting Next History:')
+
+results |> head()
+```
+
+One we have all of the predicted next hsitories, we can take the sum to get the answer.
+
+```{r}
+#| eval: false
+results |> unlist() |> sum()
+```
+
+<!-- - 1772145754 [correct] -->
+
+# Part 2
+
+Part 2 of the puzzle is fairly simple, instead of the next value in the history we need to identify the previous value of the history. We simply modify the code to the `predicted_next_history` function to identify the reverse.
+
+```{r}
+predicted_prev_history <- \(history) {
+
+  all_zeroes <- FALSE
+  i <- 0
+  temp <- history
+  prev <- NULL
+  
+  while (all_zeroes == FALSE) {
+    new <- paste0('c', i + 1)
+    prev <- paste0('c', i)
+    
+    temp <- generate_new_columns(temp, new, prev)
+    new_column <- temp |> pull(!!new) |> na.omit()
+    all_zeroes <- all(new_column == 0)
+    
+    i <- i + 1
+    
+  }
+  
+  values <- map(temp, \(x) {
+    vals <- x |> na.omit()
+    
+    return(vals[1])
+    
+  })
+  
+  
+  values <- values |>
+    unlist()
+  
+  values <- values[1:length(values) - 1]
+  
+  values <- rev(values)
+  
+  current_value <- 0
+  values <- map(values, \(x) {
+    current_value <<- x - current_value
+    
+    
+  }) |> unlist()
+  
+  values[length(values)] |> unname()
+  
+}
+
+results <-
+  map(data, \(x) predicted_prev_history(x), .progress = 'Predicting Prev History:')
+
+results |> head()
+
+```
+
+With the results, we can take the sum to get the answer.
+
+```{r}
+#| eval: false
+results |> unlist() |> sum()
+```
+
+<!-- - 867(correct) -->
