@@ -1,0 +1,111 @@
+---
+title: "Advent of Code 2023, Day 12"
+date: '12/23/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+```{r}
+library(tidyverse)
+library(here)
+library(rlang)
+
+```
+
+# Part 1
+
+This is a fairly straightforward puzzle. The trickiest part of this puzzle is writing out the regex to match the proper conditions, based on the arragnements.
+
+The idea of this puzzle is that we are given a set of conditions of 'hot springs', where . are considered 'working' and # are considered 'broken'. We area also given ? which means it can either be working or broken. We are also given a set of arragnements, or 'sets' of broken hot springs. For row #1, the arragements of 4,4 indicates there are 2 sets of 4 consecutive broken hot springs, separated by at elast 1 working hot spring. The goal is to determine the number of possible arrangements of hot springs that satisfy the given conditions.
+
+As always, lets start off with reading in the puzzle input.
+
+```{r}
+
+data <- read_lines(
+  here('posts', 'aoc-2023-d12', 'puzzle-input.txt')
+)
+
+data <- data |> 
+  as_tibble() |> 
+  separate(value, into = c('conditions', 'arrangements'), sep = ' ')
+
+data
+```
+
+Now that we have the puzzle input properly formatted, I wrote the following function to help facilitate identifying the number of possible arrangements based on the given criteria. The function reads in the conditions and arrangements, and then creates a grid of all possible combinations of working and broken hot springs. It then filters the grid based on the regex pattern of the given arrangements, and returns the number of rows in the filtered grid.
+
+```{r}
+determine_possible_arrangements <- \(conditions, arrangements) {
+  conditions <- conditions |> str_split('') |> unlist()
+  
+  conditions <- conditions |>
+    set_names(paste0('c', 1:length(conditions)))
+  
+  params <- tibble(!!!conditions) |>
+    pivot_longer(everything(), names_to = 'col_name')
+  
+  params <- params |>
+    deframe() |>
+    as.list()
+  
+  params <- map(params, \(x) {
+    if (x == '?') {
+      expr(c('.', '#'))
+    } else {
+      expr(as.character(!!x))
+    }
+    
+  })
+  
+  grid <- expr({
+    crossing(!!!params)
+  }) |> eval()
+  
+  arrangements <- arrangements |>
+    str_split(',') |>
+    unlist()
+  
+  arrangements <-
+    map(arrangements, \(x) paste0('#{', x, '}')) |> unlist()
+  
+  arrangements <- glue::glue_collapse(arrangements, sep = '\\.+')
+  
+  arrangements <- glue::glue_collapse(c('^\\.*', arrangements, '\\.*$')) |> as.character()
+  
+  cols <- paste0('c', 1:length(grid)) |> syms()
+  
+  grid <- grid |>
+    mutate(c = paste(!!!cols, sep = ''))
+  
+  grid <- grid |>
+    filter(str_detect(c, arrangements))
+  
+  nrow(grid)
+  
+}
+
+```
+
+Now that we have our function written, let's apply this for all rows in our puzzle input. We can use `purrr::map2` to iterate over both the conditions and arrangements columns, and apply our function to each row. We can then sum the results to get our final answer.
+
+```{r}
+#| eval: false
+results <- map2(data$conditions, data$arrangements, \(conditions, arrangements) {
+  
+  determine_possible_arrangements(conditions, arrangements)
+  
+}, .progress = TRUE)
+
+results |> unlist() |> sum()
+```
+
+
+
