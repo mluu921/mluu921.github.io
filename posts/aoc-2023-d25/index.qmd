@@ -1,0 +1,95 @@
+---
+title: "Advent of Code 2023, Day 25"
+date: '12/25/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+```{r}
+library(tidyverse)
+library(here)
+library(rlang)
+library(networkD3)
+library(igraph)
+```
+
+# Part 1
+
+This was a fun puzzle! The moment I read the puzzle prompt I instantly thought of network analysis. I used the `networkD3` package to visualize the network and the `igraph` package to decompose the network into its connected components. 
+
+As always let's start off with reading in the puzzle input, and tidy it into something that we can work with.
+
+```{r}
+
+data <- read_lines(here('posts', 'aoc-2023-d25', 'puzzle-input.txt'))
+
+data <- data |>
+  as_tibble()
+
+data <- data |>
+  separate(value, c('source', 'nodes'), sep = ': ') |>
+  separate(nodes, paste0('node', 1:20), sep = ' ') |>
+  pivot_longer(contains('node')) |>
+  filter(!is.na(value)) |>
+  rename('target' = value) |>
+  select(-name)
+
+
+```
+
+Now let's use a network visualization to see what we're working with.
+
+```{r}
+#| column: screen
+#| fig-height: 15
+
+simpleNetwork(data, fontSize = 20, zoom = FALSE, linkDistance = 25, charge = -10)
+```
+
+What's really awesome about this is we can instantly see what the links are that are connecting the two networks. If we 'cut' those links then we can separate the connected network into two separate networks.
+
+The specific links we're going to 'cut' are the following.
+
+- zlv/bmx
+- lrd/qpg
+- xsl/tpb
+
+We're going to simply remove those links from the data and then re-visualize the network.
+```{r}
+data <- data |> 
+  filter(
+    !(source == 'zlv' & target == 'bmx')
+  ) |> 
+  filter(
+    !(source == 'lrd' & target == 'qpg')
+  ) |>
+  filter(
+    !(source == 'xsl' & target == 'tpb')
+  ) 
+```
+
+```{r}
+#| column: screen
+#| fig-height: 15
+
+simpleNetwork(data, fontSize = 20, zoom = FALSE, linkDistance = 25, charge = -10)
+```
+
+Now we can see that we have two separate networks. 
+
+We can use the `igraph` package to decompose the network into its connected components and the use `vcount` to count the number of nodes within each separate network.
+
+```{r}
+#| eval: false
+ig <- igraph::graph_from_data_frame(data)
+
+decompose(ig) |> map(\(x) vcount(x)) |> unlist() |> prod()
+```
+
