@@ -21,6 +21,15 @@ library(rlang)
 
 # Part 1
 
+Another fairly straight forwad puzzle. We are given an algorithm that we need to follow. The algorithm is as follows:
+
+- Determine the ASCII code for the current character of the string.
+- Increase the current value by the ASCII code you just determined.
+- Set the current value to itself multiplied by 17.
+- Set the current value to the remainder of dividing itself by 256.
+
+As always let's read in the puzzle input and tidy the input into something we can work with.
+
 ```{r}
 
 data <- read_lines(
@@ -31,15 +40,13 @@ data <- data |>
   str_split(',') |> 
   unlist() |> 
   as_tibble()
+
+data
 ```
 
-Determine the ASCII code for the current character of the string.
-Increase the current value by the ASCII code you just determined.
-Set the current value to itself multiplied by 17.
-Set the current value to the remainder of dividing itself by 256.
+Now let's write a helper function that can help us decode the hash based on the provided algorithm.
 
 ```{r}
-
 hash_decoder <- \(hash) {
   
   hash <- hash |> str_split('') |> unlist()
@@ -55,6 +62,11 @@ hash_decoder <- \(hash) {
   return(current_value)
   
 }
+```
+
+Finally let's apply the function across all of the values.
+
+```{r}
 
 data <- data |> 
   rowwise() |> 
@@ -63,8 +75,14 @@ data <- data |>
   ) |> 
   ungroup()
 
-sum(data$hash)
+data
 
 ```
 
-- attempt 1 [correct]
+The solution of the puzzle is simply the sum of all the hash values.
+
+```{r}
+#| eval: false
+sum(data$hash)
+```
+
