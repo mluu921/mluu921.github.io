@@ -1,0 +1,15 @@
+{
+  "hash": "acd41d345504a15027826ed83f736724",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Advent of Code 2023, Day 12\"\ndate: '12/23/2023'\nwarning: false\nmessage: false\ncategories:\n  - advent of code\neditor_options: \n  chunk_output_type: console\nimage: \"https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png\"\n---\n\n\n![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nlibrary(here)\nlibrary(rlang)\n```\n:::\n\n\n# Part 1\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndata <- read_lines(\n  here('posts', 'aoc-2023-d13', 'puzzle-input.txt')\n)\n\ndata <- data |> \n  as_tibble()\n\ndata <- data |> \n  slice(1:7)\n\ndata |> \n  separate(value, paste0('c', 1:20), '')\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n# A tibble: 7 × 20\n  c1    c2    c3    c4    c5    c6    c7    c8    c9    c10   c11   c12   c13  \n  <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr> <chr>\n1 \"\"    #     .     #     #     .     .     #     #     .     <NA>  <NA>  <NA> \n2 \"\"    .     .     #     .     #     #     .     #     .     <NA>  <NA>  <NA> \n3 \"\"    #     #     .     .     .     .     .     .     #     <NA>  <NA>  <NA> \n4 \"\"    #     #     .     .     .     .     .     .     #     <NA>  <NA>  <NA> \n5 \"\"    .     .     #     .     #     #     .     #     .     <NA>  <NA>  <NA> \n6 \"\"    .     .     #     #     .     .     #     #     .     <NA>  <NA>  <NA> \n7 \"\"    #     .     #     .     #     #     .     #     .     <NA>  <NA>  <NA> \n# ℹ 7 more variables: c14 <chr>, c15 <chr>, c16 <chr>, c17 <chr>, c18 <chr>,\n#   c19 <chr>, c20 <chr>\n```\n\n\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

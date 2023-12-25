@@ -1,0 +1,15 @@
+{
+  "hash": "fe9acea6b7889590c3268dad8cfc681e",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Advent of Code 2023, Day 15\"\ndate: '12/24/2023'\nwarning: false\nmessage: false\ncategories:\n  - advent of code\neditor_options: \n  chunk_output_type: console\nimage: \"https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png\"\n---\n\n\n![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nlibrary(here)\nlibrary(rlang)\n```\n:::\n\n\n# Part 1\n\n\n::: {.cell}\n\n```{.r .cell-code}\ndata <- read_lines(\n  here('posts', 'aoc-2023-d15', 'puzzle-input.txt')\n)\n\ndata <- data |> \n  str_split(',') |> \n  unlist() |> \n  as_tibble()\n```\n:::\n\n\nDetermine the ASCII code for the current character of the string.\nIncrease the current value by the ASCII code you just determined.\nSet the current value to itself multiplied by 17.\nSet the current value to the remainder of dividing itself by 256.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nhash_decoder <- \\(hash) {\n  \n  hash <- hash |> str_split('') |> unlist()\n  \n  current_value <- 0\n  walk(hash, \\(x) {\n    ascii_code <- utf8ToInt(x)\n    current_value <- (current_value + ascii_code) * 17\n    current_value <<- current_value %% 256\n    \n  })\n  \n  return(current_value)\n  \n}\n\ndata <- data |> \n  rowwise() |> \n  mutate(\n    hash = hash_decoder(value)\n  ) |> \n  ungroup()\n\nsum(data$hash)\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 511257\n```\n\n\n:::\n:::\n\n\n- attempt 1 [correct]\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

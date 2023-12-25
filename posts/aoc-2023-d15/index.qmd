@@ -1,0 +1,70 @@
+---
+title: "Advent of Code 2023, Day 15"
+date: '12/24/2023'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://miro.medium.com/max/1400/1*8NspdbQcI6w6tjZQ7kjS-A.png"
+---
+
+![](https://miro.medium.com/v2/resize:fit:4800/format:webp/1*8NspdbQcI6w6tjZQ7kjS-A.png)
+
+```{r}
+library(tidyverse)
+library(here)
+library(rlang)
+
+```
+
+# Part 1
+
+```{r}
+
+data <- read_lines(
+  here('posts', 'aoc-2023-d15', 'puzzle-input.txt')
+)
+
+data <- data |> 
+  str_split(',') |> 
+  unlist() |> 
+  as_tibble()
+```
+
+Determine the ASCII code for the current character of the string.
+Increase the current value by the ASCII code you just determined.
+Set the current value to itself multiplied by 17.
+Set the current value to the remainder of dividing itself by 256.
+
+```{r}
+
+hash_decoder <- \(hash) {
+  
+  hash <- hash |> str_split('') |> unlist()
+  
+  current_value <- 0
+  walk(hash, \(x) {
+    ascii_code <- utf8ToInt(x)
+    current_value <- (current_value + ascii_code) * 17
+    current_value <<- current_value %% 256
+    
+  })
+  
+  return(current_value)
+  
+}
+
+data <- data |> 
+  rowwise() |> 
+  mutate(
+    hash = hash_decoder(value)
+  ) |> 
+  ungroup()
+
+sum(data$hash)
+
+```
+
+- attempt 1 [correct]
