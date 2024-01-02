@@ -11,14 +11,12 @@ editor_options:
   chunk_output_type: console
 ---
 
-
 ```{r}
 library(tidyverse)
 library(gt)
 ```
 
 ```{r}
-#| column: page
 
 data <- tibble(
   title = c(
@@ -41,12 +39,21 @@ data <- tibble(
     'Talk presented for the BMS510 course',
     'Talk presented for the MRM615 course',
     'Talk presented for the BSSR Journal Club'
+  ),
+  date = c(
+    '2023-09-12',
+    '2022-09-07',
+    '2022-09-22',
+    '2021-06-22',
+    '2023-05-11'
   )
 )
 
 data <- data |>
   mutate(title = glue::glue('<a href={link}>{title}</a>')) |>
-  select(-link)
+  mutate(date = lubridate::ymd(date)) |> 
+  select(-link) |> 
+  arrange(desc(date))
 
 data |>
   gt() |>
@@ -56,7 +63,9 @@ data |>
   opt_interactive(use_compact_mode = TRUE) |> 
   cols_label(
     title = 'Title',
-    desc = 'Description'
+    desc = 'Description',
+    date = 'Date'
   )
+
 ```
 
