@@ -25,19 +25,22 @@ data <- tibble(
     'Descriptive Statistics: The Importance of Visualization',
     'Data Manipulation: Introduction to the tidyverse: dplyr & tidyr',
     'Descriptive Statistics in R: Introduction to plotting in the tidyverse: ggplot2',
-    'Descriptive Statistics'
+    'Descriptive Statistics',
+    'A Brief Introduction to Git and Github'
   ),
   link = c(
     'https://mluu921.github.io/cshs-fall-lecture-descriptive-statistics/#/descriptive-statistics',
     'https://mluu921.github.io/cshs-bms510-data-manipulation-slides/#/data-manipulation-in-r',
     'https://mluu921.github.io/cshs-bms510-ggplot2-slides/#/descriptive-statistics-in-r',
-    'https://mluu921.github.io/biostats_mrm615_descriptive/'
+    'https://mluu921.github.io/biostats_mrm615_descriptive/',
+    'https://mluu921.github.io/git-github-slides/'
   ),
   desc = c(
     'Talk presented at the annual CSHS Biostatistics Fall Lecture',
     'Talk presented for the BMS510 course',
     'Talk presented for the BMS510 course',
-    'Talk presented for the MRM615 course'
+    'Talk presented for the MRM615 course',
+    'Talk presented for the BSSR Journal Club'
   )
 )
 
