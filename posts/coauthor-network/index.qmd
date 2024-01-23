@@ -1,0 +1,102 @@
+---
+title: "Co-author Network Analysis with networkD3"
+date: '01/23/2024'
+categories:
+  - visualization
+  - networkD3
+editor_options: 
+  chunk_output_type: console
+image: "image.png"
+---
+
+This is post was largely inspired by the advent of code 2023 day 25 puzzle which largely involved network analysis. I thought it would be a fun visualization to visualize the network of inter-connected co-authors among the publications I have been a part of.
+
+We start off with using the `RefManageR` package to query pubmed for all publications with my name and Cedars-Sinai as an affiliation. We then use `tidyverse` to wrangle the data into a format that can be used by `networkD3`.
+
+```{r}
+#| warning: false
+#| message: false
+
+library(igraph)
+library(tidyverse)
+library(RefManageR)
+library(gt)
+library(networkD3)
+
+```
+
+```{r}
+q <- '(Michael Luu) AND (Cedars-Sinai[Affiliation])'
+
+data <- RefManageR::ReadPubMed(q, retmax = 999)
+
+data <- data |> as_tibble()
+
+data <- data |>
+  select(author) |>
+  mutate(i = row_number(), .before = author) |> 
+  separate_wider_delim(
+    author,
+    delim = ' and ',
+    names = paste0('author', 1:30),
+    too_few = 'align_start'
+  ) |> 
+  pivot_longer(2:31) |> 
+  filter(!is.na(value))
+
+data
+```
+
+Now that we have the data in a tidy format, let's construct a tibble, where all co-authors are connected to all other co-authors for a given publication. Since the list of interconnected co-authors are so large, for simplicity sake we are going to randomly sample 5 publications and visualize the network of co-authors for those publications only.
+
+```{r}
+
+nd <- data |> 
+  group_nest(i) |> 
+  deframe() |> 
+  map(\(x) {
+    
+    authors <- x |> pull(value)
+    
+    data <- tidyr::crossing(
+      from = authors,
+      to = authors
+    )
+    
+    data <- data |> 
+      filter(from != to)
+    
+    return(data)
+    
+  }) |> 
+  bind_rows(.id = 'id')
+
+selected_publications <- nd |> pull(id) |> unique() |> sample(5)
+
+nd <- nd |> filter(id %in% selected_publications) |> select(-id)
+
+```
+
+The following is the interactive network of co-authors for the selected publications!
+
+```{r}
+
+ig <- graph_from_data_frame(nd)
+
+n <- networkD3::igraph_to_networkD3(ig)
+
+forceNetwork(
+  Links = n$links,
+  Nodes = n$nodes,
+  Source = 'source',
+  Target = 'target',
+  NodeID = 'name',
+  Group = 'name',
+  zoom = TRUE,
+  opacity = .9,
+  charge = -100,
+  height = 800,
+  fontSize = 20
+)
+```
+
