@@ -59,13 +59,26 @@ data |>
   gt() |>
   fmt_url(columns = title) |>
   cols_align(columns = title,
-             align = 'left') |> 
-  opt_interactive(use_compact_mode = TRUE) |> 
-  cols_label(
-    title = 'Title',
-    desc = 'Description',
-    date = 'Date'
-  )
+             align = 'left') |>
+  opt_interactive(
+    active = TRUE,
+    use_pagination = TRUE,
+    use_pagination_info = TRUE,
+    use_sorting = TRUE,
+    use_search = TRUE,
+    use_filters = TRUE,
+    use_resizers = FALSE,
+    use_highlight = FALSE,
+    use_compact_mode = TRUE,
+    use_text_wrapping = TRUE,
+    use_page_size_select = FALSE,
+    page_size_default = 10,
+    page_size_values = c(10, 25, 50, 100),
+    pagination_type = c("numbers", "jump", "simple")
+  ) |>
+  cols_label(title = 'Title',
+             desc = 'Description',
+             date = 'Date')
 
 ```
 
