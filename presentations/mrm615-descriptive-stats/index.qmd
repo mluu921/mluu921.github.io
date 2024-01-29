@@ -1,0 +1,20 @@
+---
+title: "Descriptive Statistics"
+date: '06/22/2021'
+warning: false
+message: false
+echo: false
+editor_options: 
+  chunk_output_type: console
+categories:
+---
+
+Talk presented for the BMS510 course
+
+```{r}
+#| column: page
+#| out-width: 100%
+
+knitr::include_url('https://mluu921.github.io/biostats_mrm615_descriptive/', height = '800px')
+```
+

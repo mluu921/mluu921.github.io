@@ -1,0 +1,20 @@
+---
+title: "Descriptive Statistics in R: Introduction to plotting in the tidyverse: ggplot2"
+date: '09/22/2022'
+warning: false
+message: false
+echo: false
+editor_options: 
+  chunk_output_type: console
+categories:
+---
+
+Talk presented for the BMS510 course
+
+```{r}
+#| column: page
+#| out-width: 100%
+
+knitr::include_url('https://mluu921.github.io/cshs-bms510-ggplot2-slides/#/descriptive-statistics-in-r', height = '800px')
+```
+

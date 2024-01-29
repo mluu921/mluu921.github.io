@@ -1,84 +1,12 @@
 ---
 title: "Presentations"
-date-modified: today
-echo: false
-warning: false
-message: false
-title-block-banner: false
+listing:
+  contents: presentations
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: true
+  filter-ui: true
 page-layout: article
-toc: true
-editor_options: 
-  chunk_output_type: console
+title-block-banner: false
 ---
-
-```{r}
-library(tidyverse)
-library(gt)
-```
-
-```{r}
-
-data <- tibble(
-  title = c(
-    'Descriptive Statistics: The Importance of Visualization',
-    'Data Manipulation: Introduction to the tidyverse: dplyr & tidyr',
-    'Descriptive Statistics in R: Introduction to plotting in the tidyverse: ggplot2',
-    'Descriptive Statistics',
-    'A Brief Introduction to Git and Github'
-  ),
-  link = c(
-    'https://mluu921.github.io/cshs-fall-lecture-descriptive-statistics/#/descriptive-statistics',
-    'https://mluu921.github.io/cshs-bms510-data-manipulation-slides/#/data-manipulation-in-r',
-    'https://mluu921.github.io/cshs-bms510-ggplot2-slides/#/descriptive-statistics-in-r',
-    'https://mluu921.github.io/biostats_mrm615_descriptive/',
-    'https://mluu921.github.io/git-github-slides/'
-  ),
-  desc = c(
-    'Talk presented at the annual CSHS Biostatistics Fall Lecture',
-    'Talk presented for the BMS510 course',
-    'Talk presented for the BMS510 course',
-    'Talk presented for the MRM615 course',
-    'Talk presented for the BSSR Journal Club'
-  ),
-  date = c(
-    '2023-09-12',
-    '2022-09-07',
-    '2022-09-22',
-    '2021-06-22',
-    '2023-05-11'
-  )
-)
-
-data <- data |>
-  mutate(title = glue::glue('<a href={link}>{title}</a>')) |>
-  mutate(date = lubridate::ymd(date)) |> 
-  select(-link) |> 
-  arrange(desc(date))
-
-data |>
-  gt() |>
-  fmt_url(columns = title) |>
-  cols_align(columns = title,
-             align = 'left') |>
-  opt_interactive(
-    active = TRUE,
-    use_pagination = TRUE,
-    use_pagination_info = TRUE,
-    use_sorting = TRUE,
-    use_search = TRUE,
-    use_filters = TRUE,
-    use_resizers = FALSE,
-    use_highlight = FALSE,
-    use_compact_mode = TRUE,
-    use_text_wrapping = TRUE,
-    use_page_size_select = FALSE,
-    page_size_default = 10,
-    page_size_values = c(10, 25, 50, 100),
-    pagination_type = c("numbers", "jump", "simple")
-  ) |>
-  cols_label(title = 'Title',
-             desc = 'Description',
-             date = 'Date')
-
-```
-

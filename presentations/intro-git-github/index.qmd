@@ -1,0 +1,20 @@
+---
+title: "A Brief Introduction to Git and Github"
+date: '05/11/2023'
+warning: false
+message: false
+echo: false
+editor_options: 
+  chunk_output_type: console
+categories:
+---
+
+Talk presented for the BSSR Journal Club
+
+```{r}
+#| column: page
+#| out-width: 100%
+
+knitr::include_url('https://mluu921.github.io/git-github-slides/', height = '800px')
+```
+

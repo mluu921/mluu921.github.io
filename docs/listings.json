@@ -28,5 +28,15 @@
       "/posts/leaflet-covid19-mask-usage/index.html",
       "/posts/nlp-taylor-swift-beyonce/index.html"
     ]
+  },
+  {
+    "listing": "/presentations.html",
+    "items": [
+      "/presentations/cshs-descriptive-stats-fall-lecture/index.html",
+      "/presentations/intro-git-github/index.html",
+      "/presentations/bms510-descriptive-stats-ggplot2/index.html",
+      "/presentations/bms510-data-manipulation-tidyverse/index.html",
+      "/presentations/mrm615-descriptive-stats/index.html"
+    ]
   }
 ]

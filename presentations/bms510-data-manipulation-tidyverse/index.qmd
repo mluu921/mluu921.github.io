@@ -1,0 +1,20 @@
+---
+title: "Data Manipulation: Introduction to the tidyverse: dplyr & tidyr"
+date: '09/07/2022'
+warning: false
+message: false
+echo: false
+editor_options: 
+  chunk_output_type: console
+categories:
+---
+
+Talk presented for the BMS510 course
+
+```{r}
+#| column: page
+#| out-width: 100%
+
+knitr::include_url('https://mluu921.github.io/cshs-bms510-data-manipulation-slides/#/data-manipulation-in-r', height = '800px')
+```
+
