@@ -37,7 +37,7 @@ data <- data |> as_tibble()
 Complete bib file can be downloaded [here](https://github.com/mluu921/mluu921.github.io/blob/master/publications.bib).
 
 ```{r}
-#| column: screen-inset
+#| column: page
 
 tbl <- data |>
   select(title, author, year, month, journal, doi) |>
@@ -70,7 +70,7 @@ tbl |>
     use_compact_mode = TRUE,
     use_text_wrapping = TRUE,
     use_page_size_select = TRUE,
-    page_size_default = 25
+    page_size_default = 10
   ) |> 
   fmt_markdown(columns = author) |> 
   fmt_date(columns = date,
@@ -78,11 +78,10 @@ tbl |>
   fmt_url(columns = title) |> 
   cols_align(columns = title, align = 'left') |> 
   cols_width(
-    title ~ px(500),
+    title ~ px(400),
     date ~ px(100)
   ) |> 
   tab_options(
-    heading.title.font.size = 30,
-    heading.title.font.weight = 'bold'
+    table.font.size = px(.5)
   )
 ```
