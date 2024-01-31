@@ -1,0 +1,211 @@
+---
+title: "Scikit-Learn Practice From the Perspective of an R User"
+date: '2024-01-30'
+draft: true
+toc: true
+image: 'https://images.unsplash.com/photo-1591453089816-0fbb971b454c?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+categories:
+  - python
+  - scikit-learn
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| warning: false
+#| message: false
+
+library(tidyverse)
+library(tidymodels)
+
+
+```
+
+One of the premiere machine learning modules in python is `scikit-learn` and it's going to be the first place I'm going to start in my journey of learning the python language.  I am going to go through the process of building a simple logistic regression model using the `tidymodels` package in R, and compare it to the process of `scikit-learn` in python.
+
+In this example, I will be using the palmerpenguins dataset found in the below link.
+
+```{r}
+
+url <- 'https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv'
+
+```
+
+The overall goal is to do a series of very standard steps in training a binary classifier (Logistic Regression).
+
+1. Read in the dataset
+2. Split the dataset into a training and testing set
+3. Train the model on the training set
+4. Evaluate the model on the testing set
+
+# tidymodels
+
+Let's start off with reading in the dataset in R
+
+```{r}
+
+data <- read_csv(url, show_col_types = FALSE)
+
+data
+```
+
+Since logistic regression is a binary classifier, we will convert the species variable into a binary outcome. The outcome we are going to train the model for is 'Chinstrap' vs 'Not Chinstrap'.
+
+```{r}
+data <- data |> 
+  mutate(
+    outcome = case_when(
+      species == 'Chinstrap' ~ 1,
+      .default = 0
+    ),
+    outcome = factor(outcome)
+  )
+
+```
+
+Now that we have the outcome coded, we can split the data into a training and testing set.  We will use the `initial_split` function from the `rsample` package to split the data into a 75/25 split.
+
+```{r}
+set.seed(1)
+split <- initial_split(data, strata = outcome)
+
+train <- training(split)
+test <- testing(split)
+
+train
+
+test
+
+```
+
+Now that we have the data split, we can pre-process the data using the recipe package.  Within recipe, we will define the outcome variable `outcome` as well as define the predictor variables `bill_length_mm`, `bill_depth_mm`, `flipper_length_mm`, and `body_mass_g`. Since there are a number of missing data, we are going to use the `step_impute_bag` function to impute the missing data. We will then normalize the predictor variables using the `step_normalize` function. 
+
+```{r}
+
+rec <-
+  recipe(outcome ~ bill_length_mm + bill_depth_mm + flipper_length_mm + body_mass_g,
+         data = data) |>
+  step_impute_bag(all_predictors()) |>
+  step_scale(all_numeric_predictors())
+
+rec
+
+```
+
+Next we are going to define a logistic regression model specification using the `logistic_reg` function from the `parsnip` package. We will also define the engine as 'glm' and the mode as 'classification'.
+
+```{r}
+glm_spec <- logistic_reg() |> 
+  set_engine('glm') |> 
+  set_mode('classification')
+
+glm_spec
+```
+
+Now we are going to combine the recipe and model specification into a workflow using the `workflow` function from the `workflows` package. We will then use the `last_fit` function to train the model in the training set, and assess the model on the testing set.
+
+```{r}
+wf <- workflow(rec, glm_spec)
+
+lf <- last_fit(wf, split)
+
+lf
+
+```
+
+We can then assess the performance of the model on the test set using the `conf_mat` function from the `yardstick` package.
+
+```{r}
+cm <- lf |> 
+  collect_predictions() |> 
+  conf_mat(truth = outcome, estimate = .pred_class)
+
+cm
+
+summary(cm, event_level = 'second')
+
+roc <- lf |> 
+  collect_predictions() |> 
+  roc_curve(truth = outcome, .pred_1, event_level = 'second') |> 
+  autoplot()
+
+roc
+```
+
+# scikit-learn
+
+Let's start off with loading the pandas module and read in the dataset using the `read_csv` method.
+
+```{python}
+import pandas as pd
+
+url = 'https://gist.githubusercontent.com/slopp/ce3b90b9168f2f921784de84fa445651/raw/4ecf3041f0ed4913e7c230758733948bc561f434/penguins.csv'
+
+data = pd.read_csv(url)
+
+data
+
+```
+
+Now that we have the data read into memory, let's convert the species variable into a binary outcome. The most intuitive method I found to do this is to use the `where` method from the `numpy` module. This appears most similar to the `mutate` with the `ifelse` function in R.
+
+```{python}
+import numpy as np
+
+data['outcome'] = np.where(data['species'] == 'Chinstrap', 1, 0)
+
+data
+
+```
+
+Now that we have the outcome coded, we can split the data into a training and testing set.  We will use the `train_test_split` method from the `sklearn` module to split the data into a 75/25 split. The `sklearn` module appears to t
+
+```{python}
+from sklearn.model_selection import train_test_split
+
+X = data.loc[:, ['bill_length_mm', 'bill_depth_mm', 'flipper_length_mm', 'body_mass_g']]
+y = data.loc[:, 'outcome']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 1)
+
+```
+
+We will use a pipeline to pre-process the data using the `KNNImputer` and `StandardScaler` function from the `sklearn` module. We will then train the model using the `LogisticRegression` method.
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+from sklearn.impute import KNNImputer
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+
+pipe = make_pipeline(KNNImputer(), StandardScaler(), LogisticRegression())
+
+pipe.fit(X_train, y_train)
+
+```
+
+Now that the model is fit, let's assess the model performance using the `confusion_matrix` and `classification_report` function from the `sklearn` module.
+
+```{python}
+from sklearn.metrics import confusion_matrix, classification_report, roc_auc_score, RocCurveDisplay
+
+confusion_matrix(y_test, pipe.predict(X_test))
+
+roc_auc_score(y_test, pipe.predict_proba(X_test)[:, 1])
+
+cr = classification_report(y_test, pipe.predict(X_test))
+
+print(cr)
+```
+
+```{python}
+RocCurveDisplay.from_predictions(y_test, pipe.predict_proba(X_test)[:, 1])
+
+```
+
+
+
+
+
+
+
