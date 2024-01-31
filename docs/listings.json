@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/scikit-learn-practice/index.html",
       "/posts/pandas-data-manipulation/index.html",
       "/posts/coauthor-network/index.html",
       "/posts/aoc-2023-d25/index.html",
