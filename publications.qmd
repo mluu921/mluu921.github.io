@@ -52,7 +52,7 @@ quarto::quarto_render("_publications-printable.qmd",
 
 Complete bib file can be downloaded [here](https://github.com/mluu921/mluu921.github.io/blob/master/publications.bib).
 
-Printable docx file can be downloaded [here](https://github.com/mluu921/mluu921.github.io/blob/master/luu-michael-publications.docx)
+Printable docx file can be downloaded [here](https://github.com/mluu921/mluu921.github.io/raw/master/luu-michael-publications.docx)
 
 ```{r}
 #| column: page
