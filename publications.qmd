@@ -16,6 +16,8 @@ library(tidyverse)
 library(RefManageR)
 library(gt)
 
+# query pubmed for new publications 
+
 q <- '(Michael Luu) AND (Cedars-Sinai[Affiliation])'
 
 last_refreshed <- fs::file_info('publications.bib') |> pull(modification_time) |> date()
@@ -28,13 +30,29 @@ RefManageR::WriteBib(data, file = 'publications.bib')
 
 }
 
-data <- RefManageR::ReadBib('publications.bib')
+# read in the bib file
 
-data <- data |> as_tibble()
+bib <- RefManageR::ReadBib('publications.bib')
+
+data <- bib |> as_tibble()
+
+```
+
+```{r}
+#| include: false
+#| eval: false
+
+# render a printable version of the publications list 
+
+quarto::quarto_render("_publications-printable.qmd",
+                      output_format = 'docx',
+                      output_file = "luu-michael-publications.docx")
 
 ```
 
 Complete bib file can be downloaded [here](https://github.com/mluu921/mluu921.github.io/blob/master/publications.bib).
+
+Printable docx file can be downloaded [here](https://github.com/mluu921/mluu921.github.io/blob/master/luu-michael-publications.docx)
 
 ```{r}
 #| column: page

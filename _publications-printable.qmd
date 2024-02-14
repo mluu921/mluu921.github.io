@@ -1,0 +1,68 @@
+---
+title: "Michael Luu"
+subtitle: "Peer Reviewed Publications"
+date: today
+embed-resources: true
+format:
+  html:
+    echo: false
+    warning: false
+    message: false
+    toc: true
+    embed-resources: true
+  docx:
+    echo: false
+    warning: false
+    message: false
+    toc: true
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r}
+#| include: false
+
+library(tidyverse)
+library(RefManageR)
+
+bib <- ReadBib('publications.bib')
+
+NoCite(bib)
+
+BibOptions(style = 'markdown')
+
+publication_years <- bib |> 
+  as_tibble() |> 
+  pull(year) |> 
+  unique()
+```
+
+{{< pagebreak >}}
+
+```{r}
+#| results: asis
+
+out <- map_chr(publication_years, \(years) {
+  text <- glue::glue(
+    '# {years}',
+    '',
+    '```{{r}}',
+    '#| results: asis',
+    '',
+    'PrintBibliography(bib[year = "{years}"])',
+    '',
+    '```',
+    .sep = '\n'
+  )
+  
+  knitr::knit_child(text = text,
+                    quiet = TRUE,
+                    envir = environment())
+  
+})
+
+cat(out, sep = '\n\n')
+
+```
+
+
