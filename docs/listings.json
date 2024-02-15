@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/quarto-dashboard/index.html",
       "/posts/scikit-learn-practice/index.html",
       "/posts/pandas-data-manipulation/index.html",
       "/posts/coauthor-network/index.html",

@@ -1,0 +1,28 @@
+---
+title: "Quarto Dashboard"
+date: '2-15-2024'
+image: featured.PNG
+draft: false
+editor_options: 
+  chunk_output_type: console
+categories:
+  - quarto
+  - dashboard
+---
+
+The following blog post is a demonstration of the new dashboard feature released in quarto 1.4. The following dashboard was built using quarto, with simple interactivity built using `gt`, and `plotly`.
+
+The most powerful feature of quarto dashboards is the ability to create complex dashboards very quicly and easily within quarto. The interactivity is provided by `gt` and `plotly` so no `shiny` server is needed. The dashboard is also fully self contained and standalone, so the dashboard can be easily shared via email as a standalone html file or shared online using a static web hosting such as github pages.
+
+The github for the raw code used to build the following dashboard can be found here: [https://github.com/mluu921/quarto-dashboard-practice](https://github.com/mluu921/quarto-dashboard-practice)
+
+```{r}
+#| column: screen-inset
+#| out-width: 100%
+#| echo: false
+knitr::include_url(
+  'https://michaelluu.info/quarto-dashboard-practice/',
+  height = '800px'
+)
+```
+
