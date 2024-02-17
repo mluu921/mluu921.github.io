@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.549">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Michael Luu">
+<meta name="dcterms.date" content="2023-11-21">
+
+<title>Michael Luu, MPH - Haunted Los Angeles - Interactive Mapping using Leaflet</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../../site_libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="../../site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet">
+<script src="../../site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="../../site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet">
+<script src="../../site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="../../site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="../../site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet">
+<script src="../../site_libs/leaflet-binding-2.2.1/leaflet.js"></script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Michael Luu, MPH</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">Blog</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../publications.html"> 
+<span class="menu-text">Publications</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../presentations.html"> 
+<span class="menu-text">Presentations</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/mluu921"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/miluu/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Haunted Los Angeles - Interactive Mapping using Leaflet</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">tidytuesday</div>
+                <div class="quarto-category">leaflet</div>
+                <div class="quarto-category">gis</div>
+                <div class="quarto-category">visualization</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Michael Luu </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 21, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block page-columns page-full" id="quarto-document-content">
+
+
+
+
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidytuesdayR)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(leaflet)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The following blog post is a very simple visualization using the data from tidytuesday 2023, week 41. This visualization uses the leaflet library to produce a very simple spatial analysis of the ‘haunted’ locations found in Los Angeles, CA.</p>
+<p>We begin by loading the data from the tidytuesdayR package.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>datas <span class="ot">&lt;-</span> <span class="fu">tt_load</span>(<span class="dv">2023</span>, <span class="dv">41</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Downloading file 1 of 1: `haunted_places.csv`</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> datas<span class="sc">$</span>haunted_places</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next we take a glimpse of the data to see what we are working with.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 10,992
+Columns: 10
+$ city           &lt;chr&gt; "Ada", "Addison", "Adrian", "Adrian", "Albion", "Albion…
+$ country        &lt;chr&gt; "United States", "United States", "United States", "Uni…
+$ description    &lt;chr&gt; "Ada witch - Sometimes you can see a misty blue figure …
+$ location       &lt;chr&gt; "Ada Cemetery", "North Adams Rd.", "Ghost Trestle", "Si…
+$ state          &lt;chr&gt; "Michigan", "Michigan", "Michigan", "Michigan", "Michig…
+$ state_abbrev   &lt;chr&gt; "MI", "MI", "MI", "MI", "MI", "MI", "MI", "MI", "MI", "…
+$ longitude      &lt;dbl&gt; -85.50489, -84.38184, -84.03566, -84.01757, -84.74518, …
+$ latitude       &lt;dbl&gt; 42.96211, 41.97142, 41.90454, 41.90571, 42.24401, 42.23…
+$ city_longitude &lt;dbl&gt; -85.49548, -84.34717, -84.03717, -84.03717, -84.75303, …
+$ city_latitude  &lt;dbl&gt; 42.96073, 41.98643, 41.89755, 41.89755, 42.24310, 42.24…</code></pre>
+</div>
+</div>
+<p>We next subset the data for the observations found in Los Angeles, CA. The longitude and latitude are then used to plot the locations on a map using the leaflet library. The ‘J.F.K. Library Third’ location is removed from the data as it is an outlier and is not located in Los Angeles, CA.</p>
+<div class="cell page-columns page-full">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(city <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">'Los Angeles'</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(state_abbrev <span class="sc">==</span> <span class="st">'CA'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(location <span class="sc">!=</span> <span class="st">'J.F.K. Library Third'</span>) <span class="sc">|&gt;</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">label =</span> glue<span class="sc">::</span><span class="fu">glue</span>(<span class="st">'&lt;b&gt;{location}&lt;/b&gt; &lt;br&gt; {description}'</span>)) <span class="sc">|&gt;</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">leaflet</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addTiles</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">addMarkers</span>(</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">lng =</span> <span class="sc">~</span> longitude,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat =</span> <span class="sc">~</span> latitude,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">popup =</span> <span class="sc">~</span> label</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display column-page">
+<div class="leaflet html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-91bc9ee0911c074b436b" style="width:100%;height:928px;"></div>
+<script type="application/json" data-for="htmlwidget-91bc9ee0911c074b436b">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"https://openstreetmap.org/copyright/\">OpenStreetMap<\/a>,  <a href=\"https://opendatacommons.org/licenses/odbl/\">ODbL<\/a>"}]},{"method":"addMarkers","args":[[34.059646,34.0462613,34.0878273,33.9652918,34.0614573,34.1889407,34.0297895,34.0297895,34.0261465,33.8316745,34.0698258,34.0623339,34.0197335,34.0140526,34.0944557,34.040713,34.0838043,34.0821574,34.0454836,34.1154172,33.9698447,34.13655440000001,34.1157564,34.1143369,34.0613992,34.1079309,33.8443038,34.0522342,34.0639323,34.027772,34.0739389,33.9465953,34.0537136,34.1573667,34.0554228,34.044917,33.9698183,33.9698183,34.0082618,33.9022367,33.948858,34.1273615,34.1273615,34.0669529,33.932262,33.9484998,34.038338,34.073851,null,34.1263884,34.074097,34.0202894,33.9582876,34.0635016,34.0699853,34.0457263,34.068921,33.9850469,33.9850469,34.0383532],[-118.297101,-118.237693,-118.3370631,-118.1514588,-118.2629339,-118.5048967,-118.2117257,-118.2117257,-118.2885195,-118.281693,-118.2345963,-118.2383309,-117.9586754,-118.2878754,-118.2274469,-118.2467693,-118.2365812,-118.3597627,-118.2639248,-118.1987917,-118.2691485,-118.2942,-118.1854042,-118.3734598,-118.2884225,-118.2774744,-118.0002265,-118.2436849,-118.3592293,-118.414233,-118.2115093,-118.3848086,-118.2426533,-118.6522057,-118.3329959,-118.296672,-118.4184969,-118.4184969,-118.2921733,-118.081733,-118.383123,-118.2105035,-118.2105035,-118.264006,-118.40317,-118.3858006,-118.2110747,-118.2399583,null,-118.4725275,-118.2912733,-117.8653386,-118.4287235,-118.4455164,-118.1862623,-118.252351,-118.4451811,-118.4694832,-118.4694832,-118.2174583],null,null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["<b>Ambassador Hotel<\/b> <br> Last year, during the filming of VH-1's \"Random Play\" several crewmembers reported seeing a ghostly figure appear in a fourth story window, lean and out and then disappear. Also, lights would inexplicably turn on and off. Strange cold spots were felt and \"shooting lights\" were seen in hallways.","<b>Angel City Brewery<\/b> <br> Formerly Pabst Blue Ribbon, this complex houses one of largest artist colony in the world. Upon ascending the stairs in the main building leading up to the rooftop, many voices could be heard. It sounds like a hundred muted conversations going on at the same time. The sound of trains and freeway traffic are audible until reaching the rooftop. Once on the roof, even the visible freeway traffic and rail yard is dead silent.","<b>Bancroft Middle school<\/b> <br> Late at night or in the morning, teachers and even some students claim that in the main building on the third floor they hear whispers and footsteps behind them and when they look back there is no one there. Also, in the gym during physical education the lights suddenly go on and off. Besides that, the janitor claims that all of a sudden the ropes to climb will move by itself and the volleyball nets outside shake very hard.","<b>Bell Gardens<\/b> <br> Suva Intermediate School - A Janitor who committed suicide is said to haunt the 2 story building also one the art class there are many cold spots and out of the corner of your eye you can see someone standing","<b>Belmont High School<\/b> <br> The spirit of a young girl by the name of \"Arabella\" haunts the Belmont auditorium. She has reported to follow actors and crew around the stage during rehearsals, flickering lights, moving curtains, turning on and off the faucets in the dressing rooms, and occasionally is heard opening and shutting doors. Legend has it, she is the spirit of a young girl who attended the once \"Private Belmont School for Girls\" during the 1900s and died there shortly after a fire destroyed the school.","<b>Birmingham High School<\/b> <br> It was a hospital in WWII. Reports include voices at night and cold spots.","<b>Boyle Heights<\/b> <br> Roosevelt High School - R Building - biggest from all the rest and the building is 3 stories high and it long, a couple decades ago the building wasn't 3 stories high it was four and it was to believe that there was a fire and some student died...here's the story, three students were in a class room and it was a dance night in Roosevelt and one of the students was spying on his girlfriend because he believed that she was cheating on him, so he was just looking out the window down into the other students, and his other friends the one's inside the classroom with him left and one of them was smoking a cigarette and when he was going out the door he threw the cigarette in the trash and the whole floor burned and one student died the one that was looking out the window and that's what people believe that cause the fire...now to this day teachers claim that when they stay late at night in the 3rd floor of the \"R\" building they will hear footsteps, doors opening and closing and TV's turning on and off by themselves and the same with the auditorium it's apart of the \"R\" building as well...some students will say that they'll hear claps and whispers when trying to skip classes eventually run out of there.","<b>Boyle Heights<\/b> <br> Our Lady of Talpa Catholic School - In the school's auditorium you can hear footsteps and movement from behind the stage curtains. In the hallways and bathrooms you can also hear footsteps like someone is running only to look and no one is there. It is said that a Nun who was a teacher there died during one of her classes of heart attack or old age. She played the piano and sometimes the piano in the auditorium will play on its own.","<b>Cal State L.A. Phase II<\/b> <br> In the phase two section of the dorms at CSULA, there is a storage room that is haunted. Once a room till the year 1999 it is has been known to emanate loud moans and screams, as well as residents in that dorm and the dorm next door, being disturbed at all hours of the day and night by persistent knocking and voices. The ghost of a blonde lady has been seen in the area and has been known to ask residents of \"her\" dorm \"Do you think I would not know.\" The story goes that she came in to find her roommate sleeping with her boyfriend, distraught and emotionally exhausted from midterms she hanged herself in the hallway directly outside her roommates room for an eerie surprise.","<b>Carson<\/b> <br> ARCO Refinery - Dark figures walking around, valves turning by themselves. In the early years of the refinery, when safety was not emphasized and the refinery was a much more dangerous place to work, many have perished and died.","<b>Cathedral High School<\/b> <br> The Cold spots near the senior patio. In the Yearbook/Newspaper room, the staff has heard noises on floor above them, even though they were the only ones on campus. The yearbook newspaper room used to be a chapel (still has the stained glass windows), said to have a negative energy in the room. School was built over a graveyard. Coffin nails are still being found in the football field. When it rains, there is a spot on the field that never gets wet. Strange occurrences during theatre productions held in the gym have also been reported, including a chair flying across the floor.","<b>Chinatown<\/b> <br> Apartment on Centennial St - Footsteps in the living room -doors opening with out the wind blowing and noises by the baby's crib and it feels like someone is standing right next to you when your sleeping in the living room by yourself.","<b>City Industry<\/b> <br> Puente Hills Mall - Reports of phenomenon happen inside the corridors. Voices being heard during the graveyard shifts. Lights flickering on and off during the night hours. Noises coming from the ceiling like someone was climbing threw the air shafts. Cold spots inside some of the corridors. A suicide happen in 2004 in the lower level women's restroom by Sears. She shot herself in the head. Sightings of a dark image inside the corridors and restroom's mirror where the suicide took place. AMC theaters sightings of children seen running thru the walls. Robinsons May motion censers security alarm goes off for no apparent reasons. We thought it was mice or rats running around. Exterminator was hired. He said there were no signs of rats or mice inside.","<b>The Coliseum<\/b> <br> In the 1960s a man fell off the top floor of the sports complex to his death. Many people thought that he had been pushed, but the court ruled it an accidental death. On night games towards the end of the game an apparition of a man is seen on the top floor of the complex as well as the sounds of screaming and a loud CRUNCH.","<b>Cypress Park Branch Library<\/b> <br> This library opened in 1924,Over the years several ghost sightings have been witnessed by numerous people. A ex worker there once spotted a translucent male floating near the old fireplace. Ghostly whispers can sometimes be heard in the men's room. Cold spots can be felt near the occult section and fireplace.","<b>Downtown<\/b> <br> Cabin The First Interstate Bldg. (now called the AON building) - The building on Wilshire burned down on may 4, 1988. An engineer was riding the elevator when the doors opened on the 12th floor, the place where the fire was taking place. When they found his body it was shriveled and burnt. Janitors have reported hearing noises and lights switching on and off on the eleventh floor as well as the 32nd floor. Also, a couple of people committed suicide by jumping off the top. One man jumped 'cause his wife left him. Another lady a couple of years back, in the 90's. Her intestines were hanging off the trees. But many claim the entire building is damned.","<b>Elysian Park<\/b> <br> Throughout the park there have been sightings dating back to before Dodger Stadium and even before the 110 Fwy went through there. Many families lived and died in the hills and valleys in this green area just north of downtown L.A. The story of the White Lady is about a woman who drowned her children in the river and wanders the park crying for them. Other versions of the White Lady story include visions of headless dogs near the sighting of the White Lady. Human figures have seen entering the tunnel under the 110 fwy at Solano Ave., but not emerging on the other side. In the Lodge area light flicker along the hillsides. Street lights often go on and off when couples park under them at night and talk about the spirits in the park. Elysian Park hosts Dodger Stadium which removed many long time residents whose families dated back to colonial times. The anger of these forcefully r emoved families or the return of spirits to the beauty of the area are the fuel for the legends. On the eastside of the park there was a cemetery that was dug up for the construction of the 110 and Cathedral High School which has its own stories of unexplained events.","<b>Fairfax high School<\/b> <br> in the rotunda shadows have been seen and cold spots have been felt. A number of students felt the urge to jump off the 3rd floor balcony \"when I walked past the entrance to the 3rd floor balcony, I felt the sudden urge to brake through the gate and jump off\". two people killed by hanging themselves and jumping off. Cold spots have also been felt and light flicker in the auditorium. One person died falling off fixing lights.","<b>Figueroa hotel<\/b> <br> Sometimes the elevator will stop on certain floors for no reason. When the doors open no one is there. Strange sounds throughout the hallways and in the rooms. Televisions turn on in the middle of the night by them selves and will not shut off.","<b>Franklin High School<\/b> <br> This school is haunted by a former student who died when she fell off a balcony on the fourth floor overlooking the quad. Some students claim that if you go to the balcony today and look down on the quad, you will feel the presence of someone standing next to you. If you look over quickly, you will catch a glimpse of the dead girl staring down--before she disappears.","<b>Fremont High School<\/b> <br> The stage in the auditorium. -  Strange shadows and feelings.","<b>Griffith park<\/b> <br> this old park known to a lot of people is known for its tragedy history. History has it that previous owners of the park were dying mysteriously. Today the parks camp road has been closed because of strange happenings. Some people report to see sacrifices and other witch like ceremonies been held there. but when they go the next day they would find no sign of such happenings.","<b>Highland Park<\/b> <br> Franklin High School - The ghost of a deceased student haunts the auditorium and the surrounding classrooms. The student had died in the 50's and continues to be heard and seen by faculty and students alike. loud unexplained noises are heard.","<b>Houdini's Mansion<\/b> <br> It is a abandoned Mansion of the magician Houdini. Many people say it is haunted and have heard footsteps on the large stairs of Houdini's Mansion. Many apparitions of a man walking also is seen through pictures.","<b>I. Magnun/Bullocks building<\/b> <br> On Wilshire Boulevard near Vermont. Now part of the Southwest Law School, the old department store built in 1929 was converted into a law library. A security guard working there during its renovation could hear a little girl's voice crying from the elevator shaft. It was rumored that a man had pushed the girl into the elevator shaft, killing her back in the 1930's. Other strange happenings observed were lights coming on and off, windows and shades being open and closed with no one in the building, and footsteps being heard on the stairway. Some construction workers reported finding secret passageways that lead from Mr. Bullock's penthouse in the building. Several construction workers had quit during remodeling due to unexplained phenomena taking place in the building's clock tower.","<b>John Marshall High School<\/b> <br> Students believe the fourth floor is haunted because of it being restricted. any info please email Haunted Places- April 2005 Correction – The rumor is that a boy was murdered up there in the 4th floor. On the 3rd floor witnesses would hear noises down the hallway, as if someone was touching the lockers. Like someone was trying to open the locker type noise. When the submitter of this update would go to the 3rd floor they always wondered why the stairs that lead to the 4th floor would be caged shut. While they attended that school, not once had they ever seen the stairs that lead to the 4th floor ever cleaned. The 3 yrs they attended the same filth would be there. The school was built sometime in 1936.","<b>Knott's Berry Farm<\/b> <br> Mrs. Knott's Chicken Dinner Restaurant a ghost in one of the empty, windowless back dining rooms. looked like an old woman and the busboy claimed it was simply a fog.","<b>LA County<\/b> <br> Walnut - City Of Indusry - St. Mary's Catholic School - Since the school doubled as an orphanage, the kids also lived there. When the school was running, kids played in the small field behind the school. One night, a couple of kids (unknown how many) snuck out of their beds and went outside to play. Then the next day the nuns found the kids dead outside. No one knows how they died (or some make up stories) But if you go there at night you can hear running inside the building and the sounds of swings and other children's toys moving. The are also devil worshipers who write anti-christ slurs on the walls in blood which can be found through out the school. There is also a story that someone was killed in the bathroom facilities behind the school either by gang members or devil worshipers. You can see the handprints in blood and other stains in side the backrooms.","<b>LA County Museum of Arts (LACMA)<\/b> <br> According to security guards, a woman was shot by her husband because she was sleeping with other men. She is now a very active spirit supposedly begging men who visit the building that see her to (to put it nicely) have sex with her as well as playing with the electrical system. Contractors doing work at the site have left in fear and never come back.","<b>Le Lycee Francias (up hill campus)<\/b> <br> in the uphill campus for the boys locker room is haunted. The lights go on and of then turn of. The door goes slam and is look but from the inside. Some times the locker open and close by themselves. Last seen in yr 2001-2002.","<b>Lincoln Heights<\/b> <br> Lincoln High School - Underneath the school there are tunnels where they used in case of bombs in the early 1900's. In the 1960's a mother of one of the black panthers hid her black panther son there for 3 years. In those tunnels there is an abandoned shooting range and you hear those guns going off during school hours. And early in the morning around 6:30 when the hall lights are off you see student apparitions in the distance of the oldest building there.","<b>Los Angeles Airport Marriott<\/b> <br> Many strange occurrences have been reported over the years. Apparitions of different beings show up in the lounge on the 18th floor & in the parking garage accompanied by feelings of terror, strange smells & sounds. Rumor is that the front office is curse - 6 suicides of people who worked in the front office since the hotel opened in 1972.","<b>Los Angeles City Hall<\/b> <br> Security Officers report of Haunting on the 2,3,4,27 and 28th floors. The 2nd floor is the scariest; the whole floor is in marble. There are noises coming from many directions and there always feels like someone is watching you. Security Officers have reported seeing apparitions in this area. The 3rd and 4th floor always seem as though someone is with you as you walk. The 27th floor \"Tom Bradley Room\" has paintings of all the Former Mayors of Los Angeles. There is one painting located in the back Hallway that is really eerie. The painting was done in the late 1800 to early 1900. This painting looks like a regular photograph and the man in side the painting seems to watch you with his eyes. This painting is extremely life like. On the 28th floor, there seems to be lot of energy. CCTV cameras have picked up human figure images. It has been believed the at one tim e or another that City Hall housed a morgue. All occurrences have happened between the hours of 0130-0500 am, but be advised the building is closed to the public at these hours.","<b>Los Angeles Pet Cemetery<\/b> <br> The Little Rascal's dog Petey, Hop along Cassidy's Horse and Mary Pickford's dog are all interred here. However, the dead animal that does the most haunting here is Kabar, a Great Dane that belonged to Rudolf Valentino. The dog died in 1929 but it's playful phantom is still reported panting or licking people that wander near it's grave.","<b>Los Angeles Senior High School<\/b> <br> There is a man who sings to Frank Sinatra songs wandering the theatre, sometimes he opens and closes the elevator door or sits in the audience section clapping unexpectedly. Usually he is around, students and teachers have said to feel his presence moving around.","<b>Loyola High School<\/b> <br> Reported noises and movement at night in the field house. A classroom, which used to be a dormitory for students in the 60's, is haunted by a student who killed himself in a trap door located on the ceiling of the room. Students and even the teacher who uses the room report an eerie presence there. The living quarters for the Jesuits is reportedly visited by an apparition of a nun. The school itself is over 150 years old.","<b>Loyola Marymount University<\/b> <br> The Strub Theatre - Said to be haunted by an old lady who sits in the back of the house watching the stage. Several actors have seen her in the audience while performing on stage and stage managers, while locking up the theatre after rehearsals or productions. have reported seeing her staring intently at the stage.","<b>Loyola Marymount University<\/b> <br> Rains Hall students have reported seeing strange apparitions as well as the ghost of a girl who died there from heart complications in 1998.","<b>Manual Arts High School<\/b> <br> The school's print shop believed to be haunted by the ghost of its first print shop teacher who worked there for over 40 years. Students have felt someone looking over their shoulder as they worked developing film in the darkroom. Witnesses have seen a man out of the corner of their eye, standing outside the darkroom near the film drying area.","<b>Norwalk<\/b> <br> AMC theater 20 - Little children and screams have been reported.","<b>Neutrogena, Johnson &amp; Johnson Corporation<\/b> <br> There is a total of three ghosts here at Neutrogena. The original founders wife was shot execution style here and so was his son. Workers and security officers working late nights will see a woman in a white dress walking around, a child playing in the factory and running (there are no children allowed in the buildings due to the hazards), and a strange growl.","<b>Occidental College<\/b> <br> Erdman Hall - A room in the center, front side of the of the 2nd floor of the Erdman Residence Hall at Occidental College is haunted by two spirits. One of a young person, who plays friendly tricks on the living in order to solicit their attention and friendship. The playful spirit has been known to turn the water faucets on and off (not a plumbing problem - the knobs have been seen turning on their own), the lights are tuned on and off, the chain on the door is taken on and off, and written messages are found on the walls. The other spirit is a dark and heavy presence that resides in one of the room's two closets. This dark being can be felt late at night typically when a person is trying to sleep - it has been described as a large dark man who stands by the door and watches as you sleep. It is clearly not friendly, but it does no more than make its presence felt. No explanation has been offered as to the source of these spirits, but they are accompanied by a few other manifestations in other parts of the building (but are concentrated in this particular room).","<b>Occidental College<\/b> <br> Newcomb Hall - Years ago, a student who had been having problems being away from home sank into a deep depression. She hung herself inside the dorm on the second floor. Strange things setting of alarms and presence felt.","<b>Our Lady of Loretto Elementary<\/b> <br> There have been reports of a woman with red heels walking down an empty hall on the 2nd floor. Students get the urge to climb the roof stairs and jump off the roof; a 5th grader did this in the 70s. Lights turn on and off inexplicably, and laughter is heard in the auditorium girls' bathroom.","<b>Qantas Freight Warehouse<\/b> <br> A warehouse worker that died while working in the bypass section in the warehouse haunts Qantas Freight. There have been numerous witnesses that claim to have seen his ghost working normally and when approached he turns around and his face and hands are bloody and mangled. The workers report the stranger to the managers and when they look for him he disappears. Many graveyard shift workers claim that he appears mostly in the cooler room checking the human remains section.","<b>Renaissance Los Angeles Airport<\/b> <br> Mostly strange sounds in the rooms and the feeling of being followed and watched.","<b>Roosevelt High School<\/b> <br> \"R\" Building - Most of the staff members and student have reported that strange noises can be heard in the a auditorium and lights go off and on when no one is there!","<b>The Dodger Stadium<\/b> <br> Ghost seen sitting in the seats.","<b>The over pass over Pasadena Free way<\/b> <br> Reports of a residual scene of a murder happening - A woman running, a man running after her, when they reach the edge of the over pass he grabs her to strangle her and throws her over.","<b>University of Judaism<\/b> <br> When the school was first being built, and there, kids and students use to come and hang out at night on the soccer field that was there. A girl was raped, her tongue cut out and murdered. It is said on nights in September and October, she has been seen her wandering the soccer field, trying to scream and call gut the names of her attackers, and that if any males wander down to the filed on nights she is out, they will go mute while on the field.","<b>Virgil Jr. High Auditorium<\/b> <br> Reports of doors opening and closing on their own, low moaning sounds emitted from empty rooms, and ropes hanging from a pipe in a bathroom stall (where a student allegedly hung himself). There has also been sightings of a glowing clown like apparition.","<b>Walnut<\/b> <br> Lemon Ave - The Lady was killed by car accident you can see her crossing the street by 9:00PM through 3:00 AM.","<b>Westchester High School<\/b> <br> It is said that 3 ghost haunt the school. There is a young man believed to be 16-18 haunting the school. Back in the 70's the boy was playing basketball for his PE class, as he went up for a shot someone took his legs out from under him and he crushed his skull and broke his neck. Late at night after hours you can hear the young man playing and you can encounter a ghostly figure walk up to you and ask \" Do u got game \"? then laugh and disappear. The other two ghosts seem to be a couple. They are seen all over the school every now and then. They will disappear when see by other people. The couple will follow and mess with you until you leave.","<b>Westwood<\/b> <br> Dykstra Hall - Supposedly there is a lively spirit still hovering over the third floor of the dormitory, where a couple of years ago a young student (overwhelmed by life) committed suicide by hanging himself in the dormitory closet. It is said that the kid killed himself across from one of the restrooms, where creepy noises can be heard during the night.","<b>Wilson High School<\/b> <br> A running figure can be seen along the track of the high school. This person was said to be running at a time late at night when some gang members saw him, and chased him with their car, killing him. Now this runner haunts the track. Another haunting at Wilson is in one of the dark rooms in the photography class, reports of being pushed around and even locked in the room. Also, a figure of a football player sitting on the bar near the docks can be seen, it has been said that after a game, he was sitting there, and fell back about 8 feet, hitting his head and killing him. Reports of the apparition of a boy seen sitting from a window he was pushed from.","<b>Palace Theatre<\/b> <br> The vaudeville-era Palace at 6th and Broadway is said to be extensively haunted by spectral stage workers and theatre guests. One of the seats near the front of the house supposedly is haunted by a man who was shat there when discovered out on a date with the wrong woman. Two old stage hands bicker in the wings. When a show stinks, the spirits make their opinion known by lobbing invisible rotten eggs at the stage. Ghost hunters have identified nearly two dozen individual hauntings in the building. There is some mischievous activity, but nothing particularly scary.","<b>University of California<\/b> <br> Dykstra Hall - Dykstra 10th floor showers turn on by themselves. Not a drip, but a full force shower, when no one's in the shower area. Residents will turn them off, and they'll turn back on. RAs have been sent to investigate and the problems were reported to Facilities who didn't find anything wrong with the showers.","<b>Venice<\/b> <br> Venice high school - it has been said that auditorium lights and sound turn on by themselves sometimes while events are taking place also screams being heard in the control room also the place gets very cold sometimes the auditorium and the school itself has a long past history of many events and the decor itself of the auditorium is very eerie old style just a weird feeling when you walk in there when empty it has been said that in fact there is an entity haunting the place.","<b>Venice Beach<\/b> <br> Westminster Ave. Apartment Bldg. - Charlie Chaplin used to own several of the large buildings that sit near or along the famous Venice Beach Boardwalk in Los Angeles. In the day, these buildings were commonly used as bath houses or lodging for wealthy vacationers. Today, these buildings have been converted to apartment buildings for the local artists, musicians, and other creative types that now inhabit Venice Beach. Incidentally these buildings cradle around the famous Building Number 26 on Westminster Ave. It has been documented in print as well as Chaplin's films that during the early 1900's he did much of his filming in and around these properties on Westminster Avenue. In 1915, during the filming of \"By the Sea\" Chaplin's stunt double mysteriously disappeared from the film set. Production was put on hold for three days and a full on man-hunt was instated. After tur ning up empty-handed, it was assumed that the long time friend of Chaplin's must have quit and left on his on recognizance. The studios that were financially backing the film, were losing money. Under haste, Chaplin was forced to replace his stunt double and continue production of the film. On the seventh day after the disappearance, Chaplin returned to his dressing room after a day of shooting. His dressing room was located in the basement of the now famous Building number 26 on Westminster. It is documented that Chaplin, while accompanied by an entourage, entered the room to discover his stunt double and long time friend lying dead on the floor, wet and covered in seaweed. The man appeared to have been deceased for several days. How he had ended up on the floor of Chaplin's dressing room after missing for almost an entire week, is still to this day a complete mystery. The \"now\" inhabitants of the famous building claim to still hear strange noises emanating from th e walls of somebody walking through shallow water. Other noises include moaning, and sounds of someone distantly crying for help. In addition to the assortment of disturbing sounds, there have been several sightings of what appears to be an apparition of a man bound by the hands and feet standing in luminous corners of the large building. Quite possibly the most blood curdling detail of all these sightings is what the man is seen wearing. He's dressed the same way he was the day he disappeared. A Chaplin-esque tuxedo coat with tails and the proverbial black derby hat.","<b>Vista Linda hospital<\/b> <br> the elevators, operate by themselves... there are terrible odors in the third floor, the smell of sick people. cold spots, and sudden chills. In the crematory there's lack of air, its very dry and eerie when you walk in."],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[33.8316745,34.1889407],"lng":[-118.6522057,-117.8653386]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
