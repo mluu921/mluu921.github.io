@@ -1,0 +1,192 @@
+---
+title: "R Environments"
+date: '2-27-2024'
+image: 'https://images.unsplash.com/photo-1702421098381-f6f180cf13bd?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+draft: false
+toc: true
+editor_options: 
+  chunk_output_type: console
+categories:
+  - programming
+---
+
+The following blog post hopes to demystify the concept of environments in R.
+
+```{r}
+#| warning: false
+#| message: false
+#| echo: false
+
+library(tidyverse)
+library(rlang)
+
+```
+
+# Example 1
+
+Let's start off by looking at a very simple example
+
+```{r}
+a <- 1
+b <- 2
+c <- 3
+
+a + b + c
+```
+
+In this code chunk we are defining the objects `a`, `b`, and `c`, and then adding them together. The important take away of this, is that the objects `a`, `b`, and `c` are all defined in the global environment.
+
+We can check the environment by using the following function
+
+```{r}
+rlang::current_env()
+```
+
+The `current_env` function returns the current environment. In this case, it returns the global environment. The global environment is the top level environment in R. It is the environment where all objects are defined by default. However, we can also define objects within other environments. For example, whenever we are working with a function, the objects defined within the function are defined within the function's environment.
+
+Although we can call the current environment with `current_env()`, we can also capture the environment into an object using the following example
+
+```{r}
+env <- rlang::current_env()
+```
+
+Now that we have the environment captured, we can use the `env` object to access objects that were defined within the environment.
+
+```{r}
+names(env)
+
+c(env$a, env$b, env$c)
+```
+
+# Example 2
+
+Now let's try this again, except we're going to define the objects within a local environment. I'm going to redefine the objects `a`, `b`, and `c` within a local environment, and then add them together.
+
+```{r}
+local({
+  a <- 4
+  b <- 5
+  c <- 6
+  
+  env <- rlang::current_env()
+  
+  values <- c(a, b, c)
+  
+  results <- a + b + c
+  
+  tibble::lst(env,
+              values,
+              results)
+})
+```
+
+We can see here the name of the local environment, as well as the results of adding the objects `a`, `b`, and `c` together, using the objects defined within the local environment.
+
+# Example 3
+
+What if we are working within a local environment that already has the objects `a`, `b`, and `c` defined? However, we would like to use the objects `a`, `b`, and `c` that are defined in the global environment.
+
+Let's take a look at the following example.
+
+```{r}
+
+local({
+  a <- 4
+  b <- 5
+  c <- 6
+  
+  env <- current_env()
+  
+  values <- c(a, b, c)
+  
+  r_expression <- rlang::expr(a + b + c)
+  
+  results <- eval_tidy(r_expression, env = global_env())
+  
+  tibble::lst(
+    env,
+    values,
+    results
+  )
+  
+})
+
+```
+
+In this example, we are defining the objects `a`, `b`, and `c` within a local environment. We then use the `expr` function to capture the expression `a + b + c`. We then use the `eval_tidy` function to evaluate the expression `a + b + c` within the global environment. This allows us to use the objects `a`, `b`, and `c` that are defined in the global environment, within the local environment.
+
+# Example 4
+
+What if we want to use the objects `a` from the global environment, and `b` and `c` from the local environment? We can actually simplify the code by explicitly calling the object `a` from the global environment `global`, and then adding the objects `b` and `c`.
+
+```{r}
+
+local({
+  a <- 4
+  b <- 5
+  c <- 6
+  
+  env <- rlang::current_env()
+  global <- rlang::global_env()
+  
+  results <- global$a + b + c
+  
+  values <- c(global$a, b, c)
+  
+  tibble::lst(
+    env,
+    values,
+    results
+  )
+  
+})
+
+```
+
+In this example, we are defining the objects `a`, `b`, and `c` within a local environment. We then use the `global_env` function to capture the global environment into an object called `global`. We then add the objects `b` and `c` to the object `a` that is defined in the global environment.
+
+# Example 5
+
+Now that we have some of the basic fundamentals down, let's get a little more complex. 
+
+A very typical workflow in R while creating new columns in a dataframe is to use the `mutate` function from dplyr. We would normally pipe the dataframe into `mutate` and define the new column. The output of `mutate` is a dataframe itself, in which we reassign the original dataframe with the new dataframe with the new column.
+
+```{r}
+data <- tibble(i = 1:26)
+
+data <- data |> 
+  mutate(
+    column_a = rnorm(26)
+  )
+
+data
+
+```
+
+What if we wanted to create 26 new columns, each with a different name and different values. Instead of manually using mutate for all 26 columns, let's use a functional programming approach to accomplish this goal.
+
+In this example i'm going to use `purrr::walk` to iterate over the list of column names. `purrr::walk` does not return anything, instead we invoke `purrr::walk` for it's side effects. What's important here is that while invoking `purrr::walk` we are operating within a function, and the function has it's own environment. What we're going to do is to define the global environment as `env` and call the object data from the global environment. We will then iterate over, create the new column within the global `data` object and then reassign the global `data` object with the new dataframe with the new column. When we call the `data` object from the global environment, we have the new dataframe with the newly created objects.
+
+```{r}
+data <- tibble(i = 1:26)
+
+column_names <- paste0("column_", letters[1:26])
+
+walk(column_names, \(x) {
+  
+  env <- global_env()
+  
+  env$data <- env$data |> 
+    mutate(
+      !!x := rnorm(26)
+    )
+  
+})
+
+data
+
+```
+
+# Conclusion
+
+In summary, it's extremely powerful to be able to specifically call objects from different environments. This allows us to use objects that are defined in different environments, within the same expression. Hopefully, this helps with demystyfing the concepts of environments within R.
