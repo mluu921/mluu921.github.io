@@ -6,7 +6,6 @@ warning: false
 message: false
 title-block-banner: false
 page-layout: article
-freeze: true
 editor_options: 
   chunk_output_type: console
 ---
@@ -38,25 +37,10 @@ data <- bib |> as_tibble()
 
 ```
 
-```{r}
-#| include: false
-#| eval: false
-
-# render a printable version of the publications list 
-
-quarto::quarto_render("_publications-printable.qmd",
-                      output_format = 'docx',
-                      output_file = "luu-michael-publications.docx")
-
-```
-
 Complete bib file can be downloaded [here](https://github.com/mluu921/mluu921.github.io/blob/master/publications.bib).
 
-Printable docx file can be downloaded [here](https://github.com/mluu921/mluu921.github.io/raw/master/luu-michael-publications.docx)
-
 ```{r}
-#| column: page
-
+#| column: screen-inset
 tbl <- data |>
   select(title, author, year, month, journal, doi) |>
   transmute(date = mdy(paste0(month, '-', year)),
