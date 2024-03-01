@@ -8,4 +8,8 @@ freeze: true
 title-block-banner: true
 
 # Make all post with my name on it 
-author: 'Michael Luu'
+author: "Michael Luu"
+
+# Add license and attribution to posts
+license: "CC BY"
+citation: true
