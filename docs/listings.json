@@ -2,6 +2,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/aoc-2024-d1/index.html",
       "/posts/r-enviro/index.html",
       "/posts/quarto-dashboard/index.html",
       "/posts/scikit-learn-practice/index.html",

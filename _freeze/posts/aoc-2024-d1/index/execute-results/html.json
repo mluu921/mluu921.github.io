@@ -1,0 +1,15 @@
+{
+  "hash": "caed70dbf0c52ae85fa51e16de23cbe2",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Advent of Code 2024, Day 1\"\ndate: '12/1/2024'\nwarning: false\nmessage: false\ncategories:\n  - advent of code\neditor_options: \n  chunk_output_type: console\nimage: \"https://www.i-programmer.info/images/stories/AdventCode.jpg\"\n---\n\n\n\n\n![](https://www.i-programmer.info/images/stories/AdventCode.jpg)\n\nThe following is the solution for AoC 2024 Day 1.\n\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nlibrary(tidyverse)\nlibrary(here)\n\ndata <- read_delim('input.txt', delim = '   ', col_names = FALSE)\n```\n:::\n\n\n\n\n# Part 1\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nout <- sum(abs(sort(data$X2) -  sort(data$X1)))\n\nout\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 3246517\n```\n\n\n:::\n:::\n\n\n\n\n# Part 2\n\n\n\n::: {.cell}\n\n```{.r .cell-code}\nout <- data |> \n  count(X2) |> \n  left_join(x = data, y = _, by = join_by(X1 == X2)) |> \n  mutate(n = ifelse(is.na(n), 0, n)) |> \n  mutate(sim_score = X1 * n) |> \n  summarise(total_sim_score = sum(sim_score)) |> \n  pull(total_sim_score)\n\nout\n```\n\n::: {.cell-output .cell-output-stdout}\n\n```\n[1] 29379307\n```\n\n\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

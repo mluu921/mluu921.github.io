@@ -1,0 +1,45 @@
+---
+title: "Advent of Code 2024, Day 1"
+date: '12/1/2024'
+warning: false
+message: false
+categories:
+  - advent of code
+editor_options: 
+  chunk_output_type: console
+image: "https://www.i-programmer.info/images/stories/AdventCode.jpg"
+---
+
+![](https://www.i-programmer.info/images/stories/AdventCode.jpg)
+
+The following is the solution for AoC 2024 Day 1.
+
+```{r}
+library(tidyverse)
+library(here)
+
+data <- read_delim('input.txt', delim = '   ', col_names = FALSE)
+
+```
+
+# Part 1
+```{r}
+out <- sum(abs(sort(data$X2) -  sort(data$X1)))
+
+out
+
+```
+
+# Part 2
+```{r}
+out <- data |> 
+  count(X2) |> 
+  left_join(x = data, y = _, by = join_by(X1 == X2)) |> 
+  mutate(n = ifelse(is.na(n), 0, n)) |> 
+  mutate(sim_score = X1 * n) |> 
+  summarise(total_sim_score = sum(sim_score)) |> 
+  pull(total_sim_score)
+
+out
+```
+
