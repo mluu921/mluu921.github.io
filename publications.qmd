@@ -15,18 +15,18 @@ library(tidyverse)
 library(RefManageR)
 library(gt)
 
-# query pubmed for new publications 
+# query pubmed for new publications
 
 q <- '(Michael Luu) AND (Cedars-Sinai[Affiliation])'
 
-last_refreshed <- fs::file_info('publications.bib') |> pull(modification_time) |> date()
+last_refreshed <- fs::file_info('publications.bib') |>
+  pull(modification_time) |>
+  date()
 
-if(last_refreshed < Sys.Date()) {
+if (last_refreshed < Sys.Date()) {
+  data <- RefManageR::ReadPubMed(q, retmax = 999)
 
-data <- RefManageR::ReadPubMed(q, retmax = 999)
-
-RefManageR::WriteBib(data, file = 'publications.bib')
-
+  RefManageR::WriteBib(data, file = 'publications.bib')
 }
 
 # read in the bib file
@@ -43,27 +43,32 @@ Complete bib file can be downloaded [here](https://github.com/mluu921/mluu921.gi
 #| column: screen-inset
 tbl <- data |>
   select(title, author, year, month, journal, doi) |>
-  transmute(date = mdy(paste0(month, '-', year)),
-            title, author, journal, doi) |> 
+  transmute(
+    date = mdy(paste0(month, '-', year)),
+    title,
+    author,
+    journal,
+    doi
+  ) |>
   arrange(desc(date))
 
-tbl <- tbl |> 
+tbl <- tbl |>
   mutate(
     author = str_replace_all(author, ' and ', ', '),
     author = str_replace_all(author, 'Michael Luu', '**Michael Luu**'),
     doi = glue::glue('https://doi.org/{doi}'),
     title = glue::glue('<a href={doi}>{title}</a>')
-  ) |> 
+  ) |>
   select(-doi)
 
-tbl |> 
-  gt() |> 
+tbl |>
+  gt() |>
   cols_label(
     date = 'Date',
     title = 'Title',
     author = 'Authors',
     journal = 'Journal'
-  ) |> 
+  ) |>
   opt_interactive(
     use_search = TRUE,
     use_filters = TRUE,
@@ -73,17 +78,13 @@ tbl |>
     use_text_wrapping = TRUE,
     use_page_size_select = TRUE,
     page_size_default = 10
-  ) |> 
-  fmt_markdown(columns = author) |> 
-  fmt_date(columns = date,
-           date_style = 'yMMM') |> 
-  fmt_url(columns = title) |> 
-  cols_align(columns = title, align = 'left') |> 
+  ) |>
+  fmt_markdown(columns = author) |>
+  fmt_date(columns = date, date_style = 'yMMM') |>
+  fmt_url(columns = title) |>
+  cols_align(columns = title, align = 'left') |>
   cols_width(
     title ~ px(400),
     date ~ px(100)
-  ) |> 
-  tab_options(
-    table.font.size = px(.5)
   )
 ```
